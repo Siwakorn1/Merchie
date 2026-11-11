@@ -5,8 +5,8 @@ import { PLAN_SHORT, type Plan } from "@/lib/plans";
 import { cn } from "@/lib/utils";
 
 /**
- * The plan as a short badge that ranks at a glance: Check up is plain, Care is brushed silver,
- * Coach is gold. No icon. Metal colors come from --plan-* tokens.
+ * The plan as a short badge that ranks at a glance: Check-up is plain, Care is brushed silver,
+ * Coach is gold, Business is deep navy. No icon. Metal colors come from --plan-* tokens.
  */
 export function PlanBadge({
   plan = "pro",
@@ -19,7 +19,12 @@ export function PlanBadge({
 }) {
   const { tr } = useLang();
   const metal =
-    plan === "pro"
+    plan === "business"
+      ? {
+          background: "linear-gradient(135deg, var(--plan-biz-1), var(--plan-biz-2))",
+          color: "var(--plan-biz-ink)",
+        }
+      : plan === "pro"
       ? { background: "linear-gradient(135deg, var(--plan-gold-1), var(--plan-gold-2))", color: "var(--plan-gold-ink)" }
       : plan === "plus"
         ? { background: "linear-gradient(135deg, var(--plan-silver-1), var(--plan-silver-2))", color: "var(--plan-silver-ink)" }

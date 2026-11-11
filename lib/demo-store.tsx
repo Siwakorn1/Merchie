@@ -4,13 +4,13 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState, u
 import { computeHealth, type Health } from "@/lib/health/score";
 import { issues as allIssues, type Issue } from "@/lib/content/issues";
 import { LOOK_ACCENT, type MascotStyle } from "@/components/mascot/mascot";
-import { atLeast, type Plan } from "@/lib/plans";
+import { PLAN_RANK, atLeast, type Plan } from "@/lib/plans";
 import type { PlatformId } from "@/components/brand/platform-logo";
 import type { ShopDoc } from "@/lib/content/documents";
 
 export type LineSettings = { connected: boolean; morning: boolean; urgent: boolean; time: string };
 const LINE_DEFAULT: LineSettings = { connected: false, morning: true, urgent: true, time: "08:00" };
-const PLATFORMS_DEFAULT: PlatformId[] = ["shopee"]; // Check up connects one platform
+const PLATFORMS_DEFAULT: PlatformId[] = ["shopee"]; // Check-up connects one platform
 
 /**
  * Prototype app state. No backend: everything lives in memory and resets on reload,
@@ -36,7 +36,7 @@ type AppState = {
 
   mascotStyle: MascotStyle;
   setMascotStyle: (s: MascotStyle) => void;
-  /** FREE / PLUS / PRO. `has("plus")` is true on PLUS and PRO */
+  /** free / plus / pro / business (Check-up / Care / Coach / Business). `has("plus")` = Care or higher */
   plan: Plan;
   setPlan: (p: Plan) => void;
   has: (need: Plan) => boolean;
@@ -54,6 +54,12 @@ type AppState = {
   /** FREE copy-checker quota used this month */
   scansUsed: number;
   useScan: () => void;
+
+  /** one-tap fixes used this month (Care allows FIX_LIMIT.plus) */
+  fixesUsed: number;
+  /** Shield cases paid one by one on Check-up / Care */
+  shieldCases: string[];
+  payShieldCase: (id: string) => void;
 
   /** licences the shop added to the Legal Checklist */
   docs: ShopDoc[];
@@ -77,9 +83,17 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
   const [suspended, setSuspended] = useState(false);
   const [mascotStyle, setMascotStyle] = useState<MascotStyle>("jelly");
   const [outfit, setOutfit] = useState(true);
-  const [plan, setPlan] = useState<Plan>("free");
+  const [plan, setPlanState] = useState<Plan>("free");
+  // switching back down (to Check-up, Care or Coach) always returns Merchie to the Classic look
+  const setPlan = useCallback(
+    (next: Plan) => {
+      if (PLAN_RANK[next] < PLAN_RANK[plan]) setMascotStyle("jelly");
+      setPlanState(next);
+    },
+    [plan],
+  );
   const has = useCallback((need: Plan) => atLeast(plan, need), [plan]);
-  const upgrade = useCallback((to: Plan) => setPlan((p) => (atLeast(p, to) ? p : to)), []);
+  const upgrade = useCallback((to: Plan) => setPlanState((p) => (atLeast(p, to) ? p : to)), []);
   const [platforms, setPlatforms] = useState<PlatformId[]>(PLATFORMS_DEFAULT);
   const connect = useCallback((id: PlatformId) => setPlatforms((p) => (p.includes(id) ? p : [...p, id])), []);
   const disconnect = useCallback((id: PlatformId) => setPlatforms((p) => p.filter((x) => x !== id)), []);
@@ -87,6 +101,8 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
   const setLine = useCallback((patch: Partial<LineSettings>) => setLineState((l) => ({ ...l, ...patch })), []);
   const [scansUsed, setScans] = useState(3);
   const [docs, setDocs] = useState<ShopDoc[]>([]);
+  const [shieldCases, setShieldCases] = useState<string[]>([]);
+  const payShieldCase = useCallback((id: string) => setShieldCases((c) => (c.includes(id) ? c : [...c, id])), []);
   const addDoc = useCallback((d: ShopDoc) => setDocs((x) => [...x, d]), []);
   const removeDoc = useCallback((id: string) => setDocs((x) => x.filter((d) => d.id !== id)), []);
   const useScan = useCallback(() => setScans((n) => n + 1), []);
@@ -96,11 +112,12 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
     setSuspended(false);
     setMascotStyle("jelly");
     setOutfit(true);
-    setPlan("free");
+    setPlanState("free");
     setPlatforms(PLATFORMS_DEFAULT);
     setLineState(LINE_DEFAULT);
     setScans(3);
     setDocs([]);
+    setShieldCases([]);
   }, []);
   const enabled = useSyncExternalStore(
     noopSubscribe,
@@ -152,6 +169,9 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
         resetDemo,
         docs,
         addDoc,
+        fixesUsed: resolved.length,
+        shieldCases,
+        payShieldCase,
         removeDoc,
       }}
     >

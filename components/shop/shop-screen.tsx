@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Check, ChevronRight, Lock, Plus } from "lucide-react";
 import { Sheet } from "@/components/ui/sheet";
 import { PlanBadge } from "@/components/ui/plan-badge";
-import { PlanOffer } from "@/components/ui/plan-offer";
+import { PlanOffer, useTryPlan } from "@/components/ui/plan-offer";
 import { PLAN_NAME, type Plan } from "@/lib/plans";
 import { useToast } from "@/components/ui/toast";
 import { AddPlatformSheet, SCOPES, platformLabel } from "@/components/shop/add-platform-sheet";
@@ -12,6 +12,7 @@ import { LineSheet } from "@/components/shop/line-sheet";
 import { PlanSheet } from "@/components/shop/plan-sheet";
 import { TeamSheet } from "@/components/shop/more-sheets";
 import { AboutSheet } from "@/components/shop/about-sheet";
+import { ReportSheet } from "@/components/shop/report-sheet";
 import { ScoreHistoryCard } from "@/components/shop/score-history";
 import { ShopAvatar } from "@/components/brand/shop-avatar";
 import { Mascot, type MascotStyle } from "@/components/mascot/mascot";
@@ -25,12 +26,13 @@ import { useMode } from "@/lib/theme";
 import merchie from "@/mock/merchie/shop.json";
 import { cn } from "@/lib/utils";
 
-type SheetId = "add" | "line" | "plan" | "team" | "about" | null;
+type SheetId = "add" | "line" | "plan" | "team" | "report" | "about" | null;
 
 export function ShopScreen() {
   const { t, lang, setLang } = useLang();
   const { mode, setMode } = useMode();
-  const { plan, platforms, line } = useDemo();
+  const { plan, platforms, line, has } = useDemo();
+  const tryPlan = useTryPlan();
   const [sheet, setSheet] = useState<SheetId>(null);
   const [managing, setManaging] = useState<PlatformId | null>(null);
   const open = (id: SheetId) => () => setSheet(id);
@@ -119,6 +121,11 @@ export function ShopScreen() {
           onClick={open("line")}
         />
         <Row label={t("ทีมและร้านอื่น", "Team and shops")} onClick={open("team")} />
+        <Row
+          label={t("รายงานรายเดือน", "Monthly report")}
+          trailing={has("business") ? undefined : <PlanBadge plan="business" small />}
+          onClick={() => (has("business") ? setSheet("report") : tryPlan("business", () => setSheet("report")))}
+        />
         <Row label={t("แพ็กเกจ", "Plan")} trailing={<PlanBadge plan={plan} />} onClick={open("plan")} />
         <Row label={t("เกี่ยวกับ Merchie", "About Merchie")} onClick={open("about")} />
       </section>
@@ -128,6 +135,7 @@ export function ShopScreen() {
       <PlanSheet key={plan} open={sheet === "plan"} onOpenChange={onOpenChange} />
       <TeamSheet open={sheet === "team"} onOpenChange={onOpenChange} />
       <AboutSheet open={sheet === "about"} onOpenChange={onOpenChange} />
+      <ReportSheet open={sheet === "report"} onOpenChange={onOpenChange} />
       <PlatformSheet id={managing} onClose={() => setManaging(null)} />
     </div>
   );
@@ -302,7 +310,7 @@ function MascotPicker() {
         {shownOffer && (
           <div className="pt-2">
             <PlanOffer
-              need={needOf(shownOffer) === "pro" ? "pro" : "plus"}
+              need={(needOf(shownOffer) ?? "plus") as Exclude<Plan, "free">}
               look={shownOffer}
               mascotSize={170}
               title={t(

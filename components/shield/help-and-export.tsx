@@ -16,7 +16,14 @@ import { cn } from "@/lib/utils";
 /* ------------------------------------------------------------- get help */
 
 /** "Something went wrong?" Pick a case; suspension opens the existing appeal sheet. */
-export function HelpSection({ onAppeal }: { onAppeal: () => void }) {
+export function HelpSection({
+  onAppeal,
+  gate = (_id, then) => then(),
+}: {
+  onAppeal: () => void;
+  /** pay-per-case check before a case opens (Check-up / Care) */
+  gate?: (caseId: string, then: () => void) => void;
+}) {
   const { t, tr } = useLang();
   const [active, setActive] = useState<HelpCase | null>(null);
   const [shown, setShown] = useState<HelpCase | null>(null);
@@ -29,7 +36,7 @@ export function HelpSection({ onAppeal }: { onAppeal: () => void }) {
         {helpCases.map((c, i) => (
           <button
             key={c.id}
-            onClick={() => (c.id === "suspended" ? onAppeal() : setActive(c))}
+            onClick={() => gate(c.id, () => (c.id === "suspended" ? onAppeal() : setActive(c)))}
             className={cn(
               "chrome flex min-h-[64px] w-full items-center gap-3 px-5 py-3 text-left transition-colors active:bg-glow",
               i > 0 && "border-t border-line",

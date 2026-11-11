@@ -11,7 +11,9 @@ import { useLang } from "@/lib/i18n";
 import { PLANS, PLAN_NAME, PLAN_RANK, type Plan } from "@/lib/plans";
 import { cn } from "@/lib/utils";
 
-/** Compare Check up / Care / Coach and switch plans (a trial in the demo). */
+/** Compare Check-up / Care / Coach / Business and switch plans (a trial in the demo). */
+const PREV: Record<Plan, Plan> = { free: "free", plus: "free", pro: "plus", business: "pro" };
+
 export function PlanSheet({ open, onOpenChange }: { open: boolean; onOpenChange: (o: boolean) => void }) {
   const { plan, setPlan } = useDemo();
   const { t, tr } = useLang();
@@ -39,7 +41,7 @@ export function PlanSheet({ open, onOpenChange }: { open: boolean; onOpenChange:
 
         {view !== "free" && (
           <p className="mt-4 text-[12px] font-semibold text-muted">
-            {t(`ทุกอย่างใน ${tr(PLAN_NAME[view === "plus" ? "free" : "plus"])} และ`, `Everything in ${tr(PLAN_NAME[view === "plus" ? "free" : "plus"])}, plus`)}
+            {t(`ทุกอย่างใน ${tr(PLAN_NAME[PREV[view]])} และ`, `Everything in ${tr(PLAN_NAME[PREV[view]])}, plus`)}
           </p>
         )}
         <ul className="mt-2 flex flex-col gap-2.5">
@@ -47,14 +49,6 @@ export function PlanSheet({ open, onOpenChange }: { open: boolean; onOpenChange:
             <li key={f.en} className="flex items-start gap-2.5 text-[14px] leading-snug">
               <Check className="mt-0.5 size-4 shrink-0 text-good-ink" strokeWidth={3} />
               <span>{tr(f)}</span>
-            </li>
-          ))}
-          {info.soon?.map((f) => (
-            <li key={f.en} className="flex items-start gap-2.5 text-[14px] leading-snug text-muted">
-              <span className="mt-0.5 size-4 shrink-0" />
-              <span>
-                {tr(f)} <span className="text-[12px]">({t("เร็ว ๆ นี้", "coming soon")})</span>
-              </span>
             </li>
           ))}
         </ul>

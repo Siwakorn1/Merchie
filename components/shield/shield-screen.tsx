@@ -10,30 +10,30 @@ import { Sheet, SheetLabel } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/toast";
 import { appeal, incident, ladder, vault, vaultStats, type VaultEntry } from "@/lib/content/shield";
 import { useDemo } from "@/lib/demo-store";
-import { ProGate } from "@/components/ui/pro-gate";
+import { useTryPlan } from "@/components/ui/plan-offer";
+import { Mascot } from "@/components/mascot/mascot";
+import { PLAN_NAME, SHIELD_CASE_PRICE } from "@/lib/plans";
 import { cn } from "@/lib/utils";
 import { l, useLang } from "@/lib/i18n";
 
-/** Shield is a Coach feature: gated until the shop starts Coach. */
+/**
+ * Shield is open to everyone: the Evidence Vault fills up on every plan. Preparing a case
+ * document (appeal or help case) is included on Coach and Business; on Check-up and Care it is
+ * paid per case. Export is part of the included Shield (Coach and up).
+ */
 export function ShieldScreen() {
-  const { t } = useLang();
-  return (
-    <ProGate
-      title={t("Shield สำหรับ Coach", "Shield is a Coach feature")}
-      body={t(
-        "ให้ Merchie เก็บหลักฐานทุกวัน และร่างเอกสารอุทธรณ์ให้ทันทีเมื่อร้านโดนระงับ",
-        "Merchie keeps evidence every day and drafts your appeal the moment the shop is suspended",
-      )}
-    >
-      <ShieldContent />
-    </ProGate>
-  );
+  return <ShieldContent />;
 }
 
 function ShieldContent() {
-  const { suspended, resolved } = useDemo();
+  const { suspended, resolved, has, shieldCases } = useDemo();
   const [appealOpen, setAppealOpen] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
+  const [paying, setPaying] = useState<{ id: string; then: () => void } | null>(null);
+  const tryPlan = useTryPlan();
+  // Coach+ includes Shield; otherwise each case is paid once, then stays open
+  const gate = (id: string, then: () => void) =>
+    has("pro") || shieldCases.includes(id) ? then() : setPaying({ id, then });
   const days = withFixes(resolved);
   const { t, tr } = useLang();
 
@@ -50,7 +50,7 @@ function ShieldContent() {
           </div>
           <Ladder current={0} />
           <button
-            onClick={() => setAppealOpen(true)}
+            onClick={() => gate("suspended", () => setAppealOpen(true))}
             className="pressable mt-5 h-12 w-full rounded-full bg-ocean text-[15px] font-semibold text-white shadow-lift"
           >
             {t("สร้างเอกสารอุทธรณ์", "Draft an appeal")}
@@ -59,14 +59,14 @@ function ShieldContent() {
       ) : null}
 
       {/* when something goes wrong, Shield turns the log into help */}
-      <HelpSection onAppeal={() => setAppealOpen(true)} />
+      <HelpSection onAppeal={() => setAppealOpen(true)} gate={gate} />
 
       {/* Evidence Vault */}
       <section>
         <div className="mb-3 flex items-center justify-between px-1">
           <h2 className="chrome text-[17px] font-bold tracking-tight">Evidence Vault</h2>
           <button
-            onClick={() => setExportOpen(true)}
+            onClick={() => (has("pro") ? setExportOpen(true) : tryPlan("pro", () => setExportOpen(true)))}
             className="pressable flex h-9 items-center gap-1.5 rounded-full bg-surface px-3.5 text-[13px] font-semibold text-ocean shadow-soft"
           >
             <Download className="size-4" strokeWidth={2.4} />
@@ -99,6 +99,7 @@ function ShieldContent() {
       </section>
 
       <AppealSheet open={appealOpen} onOpenChange={setAppealOpen} />
+      <PayCaseSheet request={paying} onClose={() => setPaying(null)} />
       <ExportSheet open={exportOpen} onOpenChange={setExportOpen} days={days} />
     </div>
   );
@@ -229,6 +230,65 @@ function AppealSheet({ open, onOpenChange }: { open: boolean; onOpenChange: (o: 
         {t("Merchie เตรียมเอกสารให้เท่านั้น ไม่ได้ว่าความแทน", "Merchie prepares documents only and does not represent you")}
       </p>
       <LegalNote />
+    </Sheet>
+  );
+}
+
+/**
+ * Pay-per-case Shield (Check-up / Care): one case for ~SHIELD_CASE_PRICE, simulated checkout,
+ * or switch to Coach where Shield is included.
+ */
+function PayCaseSheet({ request, onClose }: { request: { id: string; then: () => void } | null; onClose: () => void }) {
+  const { payShieldCase } = useDemo();
+  const { t, tr } = useLang();
+  const toast = useToast();
+  const tryPlan = useTryPlan();
+  const [shown, setShown] = useState(request);
+  if (request && request !== shown) setShown(request);
+  const price = SHIELD_CASE_PRICE.toLocaleString("th-TH");
+
+  return (
+    <Sheet open={!!request} onOpenChange={(o) => !o && onClose()}>
+      {shown && (
+        <div className="flex flex-col items-center text-center">
+          <Mascot variant="guardian" size={110} />
+          <h2 className="mt-1 text-[19px] font-bold tracking-tight">{t("ใช้ Shield เคสนี้", "Use Shield for this case")}</h2>
+          <p className="mt-1 max-w-[280px] text-[14px] leading-relaxed text-balance text-muted">
+            {t(
+              "Merchie ร่างเอกสาร แนบหลักฐานจาก Vault และบอกขั้นตอนต่อไปให้ครบ",
+              "Merchie drafts the document, attaches evidence from the Vault, and lays out the next steps",
+            )}
+          </p>
+          <p className="num mt-4 text-[28px] leading-none font-bold">~฿{price}</p>
+          <p className="mt-1 text-[13px] text-muted">{t("ต่อเคส", "per case")}</p>
+
+          <button
+            onClick={() => {
+              const then = shown.then;
+              payShieldCase(shown.id);
+              onClose();
+              toast(t("ชำระแล้ว (จำลอง)", "Paid (simulated)"), t("เปิดเคสนี้ได้เลย", "This case is open"));
+              setTimeout(then, 350);
+            }}
+            className="pressable mt-5 h-12 w-full rounded-full bg-ocean text-[15px] font-semibold text-white shadow-lift"
+          >
+            {t(`จ่าย ~฿${price} สำหรับเคสนี้`, `Pay ~฿${price} for this case`)}
+          </button>
+          <button
+            onClick={() => {
+              const then = shown.then;
+              onClose();
+              setTimeout(() => tryPlan("pro", then), 350);
+            }}
+            className="pressable mt-2 h-12 w-full rounded-full bg-glow text-[15px] font-semibold text-ocean"
+          >
+            {t(`หรือ ${tr(PLAN_NAME.pro)} รวม Shield ทุกเคส`, `Or ${tr(PLAN_NAME.pro)}: Shield for every case`)}
+          </button>
+          <button onClick={onClose} className="pressable mt-1 h-11 w-full rounded-full text-[15px] font-semibold text-muted">
+            {t("ไว้ก่อน", "Not now")}
+          </button>
+        </div>
+      )}
     </Sheet>
   );
 }

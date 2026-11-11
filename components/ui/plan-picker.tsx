@@ -11,6 +11,7 @@ import { PLANS, PLAN_NAME, PLAN_RANK, type Plan } from "@/lib/plans";
 import { cn } from "@/lib/utils";
 
 type Paid = Exclude<Plan, "free">;
+const PREV: Record<Paid, Plan> = { plus: "free", pro: "plus", business: "pro" };
 type Request = { need: Paid; onDone?: () => void };
 
 const Ctx = createContext<((need: Paid, onDone?: () => void) => void) | null>(null);
@@ -122,9 +123,9 @@ export function PlanChooser({
                 </span>
               ) : (
                 <span className="mt-2.5 flex flex-col gap-1.5">
-                  {id === "pro" && (
+                  {id !== "plus" && (
                     <span className="text-[12px] font-semibold text-muted">
-                      {t(`ทุกอย่างใน ${tr(PLAN_NAME.plus)} และ`, `Everything in ${tr(PLAN_NAME.plus)}, plus`)}
+                      {t(`ทุกอย่างใน ${tr(PLAN_NAME[PREV[id]])} และ`, `Everything in ${tr(PLAN_NAME[PREV[id]])}, plus`)}
                     </span>
                   )}
                   {p.features.slice(0, 3).map((f) => (

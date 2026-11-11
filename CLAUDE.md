@@ -87,12 +87,14 @@ Demo first: everything should support the "skin cream shop on Shopee" demo story
 - **Package manager:** npm.
 - **Data:** static mock JSON in the repo, shaped like Shopee Open Platform responses. No login in the demo.
 - **Alerts:** LINE Messaging API, through the LINE OA morning brief and urgent alerts. Only a simulated connect page exists (`components/shop/line-sheet.tsx`); do not call the real LINE API until asked.
-- **Deploy:** Vercel, with a QR code that links to the production URL.
-- **Plans (3 tiers):** ids `free` / `plus` / `pro` in code, shown as **Check up / Care / Coach** via `PLAN_NAME` / `PLAN_SHORT` in `lib/plans.ts`. Never hardcode plan names in copy; render `tr(PLAN_NAME[id])`. Badges: Check up plain, Care silver, Coach gold, no icon.
+- **Deploy:** Vercel, imported from the GitHub repo `Siwakorn1/Merchie` (auto-deploys on push to `main`). The desktop QR uses the page's own origin. Screenshots for slides live outside the repo in `~/Documents/marchie-screenshots/`.
+- **Plans (4 tiers):** ids `free` / `plus` / `pro` / `business` in code, shown as **Check-up / Care / Coach / Business** via `PLAN_NAME` / `PLAN_SHORT` in `lib/plans.ts`. Never hardcode plan names or limits in copy; use `PLAN_NAME`, `PLATFORM_LIMIT`, `FIX_LIMIT`, `SEAT_LIMIT`, `SHIELD_CASE_PRICE`.
   - Gate with `useDemo().has(need)`, `ProGate need=…`, or `PlanOffer need=…`. Every "Try" goes through the plan popup (`useTryPlan()` / `usePlanPicker()`); never upgrade directly from a button.
-  - Check up: health score (4 rings), 1 platform, says where the problem is, basic checklist, 10 copy checks/month.
-  - Care: health score analysis (breakdown "why", issue steps/citations), customer insight (platform monitor insight), more platforms, Fix-it jobs, LINE, unlimited checks, chat, all looks, 12-month history.
-  - Coach: Live analysis, Script check, CF data, Shield, appeals, Crisis, tax, multi-shop/admins, Rainbow look.
+  - Check-up: health score, 1 platform, says where the problem is, basic checklist, 10 copy checks/month, Shield pay per case.
+  - Care: Fix-it 10/month, 3 platforms, customer insight, score analysis, LINE, chat, all looks except Rainbow, 12-month history, unlimited checks, Shield pay per case.
+  - Coach: unlimited Fix-it, every platform, Live Coach (live analysis, script check, CF data), Shield included, 3 seats, Crisis, tax, Rainbow look.
+  - Business: many shops, unlimited seats, reseller listing checks, monthly report + account manager.
+  - Switching to a lower plan resets Merchie to Classic. Trial copy never states a length ("ฟรีก่อนเลย").
   - Never claim more than the app does today (no "coming soon" features, no partner-lawyer network, no response-time promises).
 - **AI features** carry `AiMark` (a single sparkle icon, no text, never a pill). The chat is "ถาม Merchie AI".
 - **Hero ring** is split into 4 arcs (legal, platform, reputation, business; clockwise from 12 o'clock), each out of 25; each part's score sits just outside its own arc with a tiny label (`components/health/segmented-ring.tsx`). The speech bubble sits above the ring so it never hides a segment.

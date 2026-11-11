@@ -11,6 +11,7 @@ import { MarketListing, MarketReview } from "@/components/fixit/market-mock";
 import { LegalNote } from "@/components/legal/citation-list";
 import { Mascot, type MascotStyle } from "@/components/mascot/mascot";
 import { PlanBadge } from "@/components/ui/plan-badge";
+import { ScoreRing } from "@/components/health/score-ring";
 import { ProGate } from "@/components/ui/pro-gate";
 import { TaxTool } from "@/components/fixit/tools/tax-tool";
 import { CrisisTool } from "@/components/fixit/tools/crisis-tool";
@@ -18,13 +19,14 @@ import { CheckerTool } from "@/components/fixit/tools/checker-tool";
 import { LiveTool } from "@/components/fixit/tools/live-tool";
 import { ScriptTool } from "@/components/fixit/tools/script-tool";
 import { CfTool } from "@/components/fixit/tools/cf-tool";
+import { ResellerTool } from "@/components/fixit/tools/reseller-tool";
 import { useToast } from "@/components/ui/toast";
 import { jobs, JOB_ALIASES, type Job, type ListingJob, type ReplyJob } from "@/lib/content/fixit";
 import { issues } from "@/lib/content/issues";
 import { useCiteLine } from "@/components/legal/citation-list";
 import { useLang } from "@/lib/i18n";
 import { useDemo } from "@/lib/demo-store";
-import { PLAN_NAME, type Plan } from "@/lib/plans";
+import { FIX_LIMIT, PLAN_NAME, type Plan } from "@/lib/plans";
 import { computeHealth } from "@/lib/health/score";
 import { useCloudTransition } from "@/components/motion/cloud-transition";
 import { cn } from "@/lib/utils";
@@ -33,7 +35,7 @@ import { cn } from "@/lib/utils";
  * Fix-it is two levels: a list of everything that needs fixing, then one fix at a time.
  * ?job=<issue id> opens a fix; no param shows the list.
  */
-type ToolId = "live" | "script" | "cf" | "tax" | "crisis" | "checker";
+type ToolId = "live" | "script" | "cf" | "resellers" | "tax" | "crisis" | "checker";
 
 export function FixItScreen() {
   const params = useSearchParams();
@@ -70,7 +72,8 @@ export function FixItScreen() {
 /* ------------------------------------------------------------------ list */
 
 function FixList() {
-  const { openIssues, resolved } = useDemo();
+  const { openIssues, resolved, plan, fixesUsed } = useDemo();
+  const fixesLeft = Math.max(0, FIX_LIMIT.plus - fixesUsed);
   const { t, tr } = useLang();
   const router = useRouter();
   const todo = openIssues.filter((i) => jobs[i.id]);
@@ -83,7 +86,21 @@ function FixList() {
     <div className="flex flex-col gap-8">
       {todo.length > 0 ? (
         <section>
-          <SectionTitle>{t("รอแก้", "To fix")}</SectionTitle>
+          <div className="flex items-center justify-between">
+            <SectionTitle>{t("รอแก้", "To fix")}</SectionTitle>
+            {plan === "plus" && (
+              <span className="-mt-2 flex items-center gap-2 text-[13px] text-muted">
+                {t(`เหลือ ${fixesLeft}/${FIX_LIMIT.plus} เดือนนี้`, `${fixesLeft}/${FIX_LIMIT.plus} left this month`)}
+                <ScoreRing
+                  score={(fixesLeft / FIX_LIMIT.plus) * 100}
+                  size={22}
+                  stroke={3.5}
+                  showNumber={false}
+                  status={fixesLeft > 1 ? "good" : fixesLeft === 1 ? "watch" : "danger"}
+                />
+              </span>
+            )}
+          </div>
           <div className="overflow-hidden rounded-card bg-surface shadow-soft">
             {todo.map((issue, i) => (
               <div key={issue.id}>
@@ -172,6 +189,14 @@ const TOOLS: { id: ToolId; title: [string, string]; sub: [string, string]; need:
     look: "jelly",
   },
   {
+    id: "resellers",
+    title: ["ตรวจ listing ตัวแทน", "Reseller listings"],
+    sub: ["หาคำเสี่ยงใน listing ของตัวแทนขาย", "Find risky claims in resellers' listings"],
+    need: "business",
+    ai: true,
+    look: "guardian",
+  },
+  {
     id: "cf",
     title: ["CF data", "CF data"],
     sub: ["รวมยอด CF จากไลฟ์เป็นออเดอร์", "Turn live CF comments into orders"],
@@ -248,6 +273,8 @@ function ToolDetail({ id }: { id: ToolId }) {
       <ScriptTool />
     ) : id === "cf" ? (
       <CfTool />
+    ) : id === "resellers" ? (
+      <ResellerTool />
     ) : id === "tax" ? (
       <TaxTool />
     ) : id === "crisis" ? (
@@ -290,6 +317,11 @@ function JobDetail({ job }: { job: Job }) {
   const router = useRouter();
   const { t, tr } = useLang();
   const issue = issues.find((i) => i.id === job.issueId)!;
+  const { plan, fixesUsed, resolved } = useDemo();
+  // Check-up: fixes come with Care. Care: FIX_LIMIT.plus a month, then Coach (unlimited). Done fixes stay viewable.
+  const done = resolved.includes(job.issueId);
+  const careUsedUp = plan === "plus" && fixesUsed >= FIX_LIMIT.plus && !done;
+  const need: Exclude<Plan, "free"> = careUsedUp ? "pro" : "plus";
   return (
     <>
       <button
@@ -301,13 +333,20 @@ function JobDetail({ job }: { job: Job }) {
       </button>
       <h2 className="mt-1 mb-4 px-1 text-[19px] font-bold tracking-tight">{tr(issue.title)}</h2>
       <ProGate
-        need="plus"
+        key={need}
+        need={need}
         look="jelly"
-        title={t(`AI แก้ให้ด้วยปุ่มเดียว มากับ ${tr(PLAN_NAME.plus)}`, `One-tap AI fixes come with ${tr(PLAN_NAME.plus)}`)}
+        title={
+          careUsedUp
+            ? t(`ใช้ Fix-it ครบ ${FIX_LIMIT.plus} ครั้งเดือนนี้แล้ว`, `All ${FIX_LIMIT.plus} fixes used this month`)
+            : t(`AI แก้ให้ด้วยปุ่มเดียว มากับ ${tr(PLAN_NAME.plus)}`, `One-tap AI fixes come with ${tr(PLAN_NAME.plus)}`)
+        }
         body={
-          job.kind === "listing"
-            ? t("Merchie เขียน listing ใหม่ให้ถูกกฎหมาย พร้อมอ้างข้อกฎหมาย", "Merchie rewrites the listing to be legal, citing the law")
-            : t("Merchie ร่างคำตอบลูกค้าที่ปลอดภัยทางกฎหมายให้", "Merchie drafts a legally safe reply")
+          careUsedUp
+            ? t(`${tr(PLAN_NAME.pro)} แก้ได้ไม่จำกัด`, `${tr(PLAN_NAME.pro)} gives you unlimited fixes`)
+            : job.kind === "listing"
+              ? t("Merchie เขียน listing ใหม่ให้ถูกกฎหมาย พร้อมอ้างข้อกฎหมาย", "Merchie rewrites the listing to be legal, citing the law")
+              : t("Merchie ร่างคำตอบลูกค้าที่ปลอดภัยทางกฎหมายให้", "Merchie drafts a legally safe reply")
         }
       >
         {job.kind === "listing" ? <ListingFix job={job} /> : <ReplyFix job={job} />}

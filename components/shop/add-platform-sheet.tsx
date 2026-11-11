@@ -9,7 +9,7 @@ import { Mascot, type MascotStyle } from "@/components/mascot/mascot";
 import { useToast } from "@/components/ui/toast";
 import { useDemo } from "@/lib/demo-store";
 import { useLang } from "@/lib/i18n";
-import { FREE_PLATFORMS } from "@/lib/plans";
+import { PLAN_NAME, PLATFORM_LIMIT, planFor } from "@/lib/plans";
 import { cn } from "@/lib/utils";
 
 const MARKETPLACES: PlatformId[] = ["shopee", "lazada", "tiktok"];
@@ -54,15 +54,18 @@ export const platformLabel = (id: PlatformId, t: (th: string, en: string) => str
 
 /**
  * Add a platform: pick one, then a mock of the platform's OAuth consent
- * (sign in to the shop, see what Merchie may read, allow). ฟรี stops at 2.
+ * (sign in to the shop, see what Merchie may read, allow). Each plan has a platform limit
+ * (Check-up 1, Care 3, Coach and Business unlimited).
  */
 export function AddPlatformSheet({ open, onOpenChange }: { open: boolean; onOpenChange: (o: boolean) => void }) {
-  const { t } = useLang();
+  const { t, tr } = useLang();
   const toast = useToast();
-  const { platforms, connect, has, mascotStyle } = useDemo();
+  const { platforms, connect, plan, mascotStyle } = useDemo();
   const [picked, setPicked] = useState<PlatformId | null>(null);
   const [busy, setBusy] = useState(false);
-  const full = !has("plus") && platforms.length >= FREE_PLATFORMS;
+  const limit = PLATFORM_LIMIT[plan];
+  const full = platforms.length >= limit;
+  const next = planFor(PLATFORM_LIMIT, platforms.length);
 
   const close = (o: boolean) => {
     onOpenChange(o);
@@ -87,11 +90,17 @@ export function AddPlatformSheet({ open, onOpenChange }: { open: boolean; onOpen
     >
       {full ? (
         <PlanOffer
-          need="plus"
+          need={next}
           look={mascotStyle}
           mascotSize={120}
-          title={t(`Check up เชื่อมได้ ${FREE_PLATFORMS} แพลตฟอร์ม`, `Check up connects ${FREE_PLATFORMS} platform`)}
-          body={t("Care เชื่อมได้หลายแพลตฟอร์ม ให้น้อง Merchie เฝ้าทุกร้านในที่เดียว", "Care connects more platforms, so Merchie watches your shops in one place")}
+          title={t(
+            `${tr(PLAN_NAME[plan])} เชื่อมได้ ${limit} แพลตฟอร์ม`,
+            `${tr(PLAN_NAME[plan])} connects ${limit} platform${limit > 1 ? "s" : ""}`,
+          )}
+          body={t(
+            `${tr(PLAN_NAME[next])} เชื่อมได้มากขึ้น ให้น้อง Merchie เฝ้าทุกร้านในที่เดียว`,
+            `${tr(PLAN_NAME[next])} connects more, so Merchie watches your shops in one place`,
+          )}
           onLater={() => close(false)}
         />
       ) : picked ? (

@@ -2,7 +2,28 @@
 
 Living status doc. **Update this file at the end of every work session**: what changed, what's decided, and what's still open. CLAUDE.md holds the rules; this file holds where things stand.
 
-_Last updated: 2026-11-11 (session 2, plans v2)_
+_Last updated: 2026-11-11 (end of session 2)_
+
+## Plans v3: four tiers (owner's table, 2569-11-12)
+- **Check-up (free) / Care (~฿390) / Coach (~฿1,290) / Business (~฿5,000–15,000)**, ids `free` / `plus` / `pro` / `business` in `lib/plans.ts`. Business badge is deep navy (`--plan-biz-*` tokens).
+- **Limits** (`PLATFORM_LIMIT`, `FIX_LIMIT`, `SEAT_LIMIT`, `planFor()` picks the cheapest plan above a usage):
+  - Platforms 1 / 3 / unlimited / unlimited (Business also many shops).
+  - Fix-it one-tap fixes 0 / 10 per month / unlimited / unlimited. Care shows "เหลือ x/10 เดือนนี้"; when used up, a fix opens the Coach offer. Usage = `fixesUsed` (resolved issues) in the demo store.
+  - Team seats 1 / 1 / 3 / unlimited (owner counts as one). Extra shops are Business only.
+- **Live Coach** (Coach+): Live analysis, Script check and CF data.
+- **Shield** is open to every plan (the Vault fills on all). Preparing a case document (appeal or help case) is ~฿499 per case on Check-up and Care (simulated checkout, `shieldCases` remembers paid cases), or included on Coach+. Export is Coach+.
+- **Business demo screens:** Fix-it tool "ตรวจ listing ตัวแทน" (`components/fixit/tools/reseller-tool.tsx`, data `lib/content/business.ts`): resellers' listings scanned for risky claims, safer wording, "ask the reseller to fix it". Shop row "รายงานรายเดือน" (`components/shop/report-sheet.tsx`): month KPIs, highlights, next steps, downloadable report, account manager card (chat / book a call, simulated).
+- Unchanged tiers for everything else: Care keeps LINE, chat, looks, 12-month history, unlimited copy checks; Coach keeps tax, crisis, Rainbow look.
+- Screenshots in `~/Documents/marchie-screenshots/` were taken before v3 (3 tiers); retake the plan/lock set if needed.
+
+## Deploy, screenshots and assets (end of session 2)
+- **GitHub:** the owner pushes. Repo `github.com/Siwakorn1/Merchie`, first real commit "Merchie prototype". Changes made after that commit (plan popup wording "ฟรีก่อนเลย", look reset on downgrade, this doc) still need `git add . && git commit && git push`.
+- **Vercel:** deploy by importing the GitHub repo at vercel.com/new (team "siwakorn1's projects"); every push to `main` redeploys. No env vars needed. `.vercelignore` and `.gitignore` keep the unused FC Minimal font files out (license). The production URL is not known yet; the desktop QR picks up `window.location.origin`, so it is correct once opened from Vercel.
+- **Phone testing on the LAN:** `npm run dev -- -H 0.0.0.0 -p 3000`, then `http://<LAN-IP>:3000` (`?demo=0` hides the demo slider).
+- **Screenshots** live outside the repo at `~/Documents/marchie-screenshots/` (guide in `อ่านก่อน.txt` there): light/dark × TH/EN, every Merchie look in light and dark, full-length pages, plan popups and locks, desktop view, transparent phone mockups, and 4K slide composites. All captured on the dev server with the Coach plan (except the plan/lock set). The capture scripts were throwaway (puppeteer-core in a temp folder), not in the repo.
+- **App icon prompt** for image generators: `docs/brand/app-icon-prompt.md` (classic blue Merchie peeking up from the bottom edge, like the reference image).
+- **Plan downgrade resets the look:** switching to a lower plan (Coach to Care, or anything to Check up) sets Merchie back to Classic (`setPlan` in `lib/demo-store.tsx`). Upgrades keep the chosen look.
+- **Trial wording:** no trial length anywhere ("ทดลอง X ฟรีก่อนเลย" / "Try X free"), so demo visitors aren't misled.
 
 ## Latest polish
 - **Plan popup for every "Try":** `PlanPickerProvider` / `usePlanPicker` (`components/ui/plan-picker.tsx`, mounted in AppShell). `useTryPlan()` and `PlanOffer`'s button now open it: Care and Coach side by side with price and key features, the cheapest plan that unlocks the feature preselected (lower plans disabled), then "ทดลอง X ฟรีก่อนเลย" (no trial length, so demo visitors are not misled). Nothing upgrades until the shop confirms.
@@ -24,7 +45,9 @@ _Last updated: 2026-11-11 (session 2, plans v2)_
 - **AI mark** is now a four-point star with a sky-to-violet gradient.
 - **No overclaims:** removed "Social listening (coming soon)", "every platform" (now "more platforms"), the LINE reply-time promise, and the partner-lawyer network (Shield now "prepares documents for your lawyer").
 
-## This session
+## Earlier in session 2
+_Some details here were superseded later: plan names are now Check up / Care / Coach (not ฟรี / เมฆเงิน / เมฆทอง), Check up connects 1 platform (not 2), and the demo panel is only the score slider plus the suspension simulation._
+
 - **3 plans:** ฟรี / เมฆเงิน / เมฆทอง (EN Free / Silver / Gold), metal badges (tokens `--plan-*`). `lib/plans.ts` holds names, prices and features. `useDemo()` has `plan`, `has()`, `upgrade()`, `setPlan()`.
   - Gating: Fix-it jobs, LINE, chat, looks, 12-month history and issue steps/citations need เมฆเงิน. Shield, tax, crisis and team need เมฆทอง. The copy checker is free with 10 checks a month (ring meter), unlimited on เมฆเงิน.
   - Plan sheet (Shop > แพ็กเกจ, or tap the profile badge) compares the 3 tiers.
@@ -171,9 +194,10 @@ _Last updated: 2026-11-11 (session 2, plans v2)_
 
 ## Open questions
 1. **Claude API for chat and Fix-it.** This needs an Anthropic key and a server route. CLAUDE.md says to ask first, and the owner hasn't answered yet.
-2. **Commit.** Nothing is committed yet (only the create-next-app initial commit). Ask before committing.
+2. ~~Commit~~ **Done by the owner:** committed and pushed to GitHub. Keep committing only when the owner asks.
 3. **Score name.** Proposed: Shop Pulse (ชีพจรร้าน, recommended), Glow, Merchie Score, Shop Vitals, Aura. Avoid "Trust Score" (phase 3) and anything with "credit".
 4. **Business part and VAT.** The "business" part (25 pts) and the VAT checklist still use revenue. If revenue isn't reliable: let the shop enter YTD revenue itself, or measure business health with returns or cancellations instead.
 5. ~~FC Minimal font~~ Tried, then **reverted to Anuphan** at the owner's request. Files remain in `app/fonts/` but are not loaded.
+6. **PWA and deploy.** Vercel deploy is in progress (GitHub import by the owner). Still not done: `app/manifest.ts`, the real app icon and maskable icon (prompt ready in `docs/brand/app-icon-prompt.md`), iOS splash, and screenshots of the desktop view with the production QR.
 7. **Peer benchmark** in monthly insights is mock data. A real one needs enough Merchie shops per category, aggregated anonymously.
-6. **PWA and deploy.** Manifest, maskable icon, iOS splash, Vercel deploy and the real QR URL are not done yet.
+8. **Verify on a real iPhone:** the speech bubble no longer uses `backdrop-filter` with `clip-path` (Safari drew a square box); confirm it now looks right on iOS Safari.
