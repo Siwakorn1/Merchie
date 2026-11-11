@@ -2,20 +2,18 @@
 
 import { Mascot, type MascotStyle } from "@/components/mascot/mascot";
 import { PlanBadge } from "@/components/ui/plan-badge";
-import { useToast } from "@/components/ui/toast";
+import { usePlanPicker } from "@/components/ui/plan-picker";
 import { useDemo } from "@/lib/demo-store";
 import { useLang } from "@/lib/i18n";
-import { PLAN_NAME, type Plan } from "@/lib/plans";
+import { type Plan } from "@/lib/plans";
 
-/** Start a trial of `need` and say so. */
+/**
+ * "Try" anywhere: opens the plan popup (plans side by side, the cheapest one that unlocks the
+ * feature preselected). Nothing upgrades until the shop confirms there; then `onDone` runs.
+ */
 export function useTryPlan() {
-  const { upgrade } = useDemo();
-  const toast = useToast();
-  const { t, tr } = useLang();
-  return (need: Plan) => {
-    upgrade(need);
-    toast(t(`ยินดีต้อนรับสู่ ${tr(PLAN_NAME[need])}`, `Welcome to ${tr(PLAN_NAME[need])}`), t("ทดลองฟรี 7 วัน", "7-day free trial"));
-  };
+  const open = usePlanPicker();
+  return (need: Exclude<Plan, "free">, onDone?: () => void) => open(need, onDone);
 }
 
 /** The one upgrade offer used everywhere: Merchie, plan badge, title, one line, Try / Not now. */
@@ -49,8 +47,7 @@ export function PlanOffer({
       <div className="mt-5 flex w-full flex-col gap-2">
         <button
           onClick={() => {
-            tryPlan(need);
-            onTried?.();
+            tryPlan(need, onTried);
           }}
           className="pressable h-12 w-full rounded-full bg-ocean text-[15px] font-semibold text-white shadow-lift"
         >

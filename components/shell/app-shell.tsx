@@ -1,4 +1,5 @@
 import { ToastProvider } from "@/components/ui/toast";
+import { PlanPickerProvider } from "@/components/ui/plan-picker";
 import { CloudTransitionProvider } from "@/components/motion/cloud-transition";
 import { ChatWidget } from "@/components/chat/chat-widget";
 import { TabBar } from "./tab-bar";
@@ -16,6 +17,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     <div className="sky relative flex h-dvh flex-col overflow-hidden frame:h-full">
       <CloudTransitionProvider>
       <ToastProvider>
+      <PlanPickerProvider>
       <TopHeader />
       <PullToRefresh>
         {children}
@@ -25,6 +27,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </PullToRefresh>
       <TabBar />
       <ChatWidget />
+      </PlanPickerProvider>
       </ToastProvider>
       </CloudTransitionProvider>
     </div>

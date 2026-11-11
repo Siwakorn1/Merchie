@@ -1,15 +1,18 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { motion } from "motion/react";
-import type { MascotStyle } from "@/components/mascot/mascot";
-import { PlanOffer } from "@/components/ui/plan-offer";
+import { useState } from "react";
+import { Lock } from "lucide-react";
+import { Mascot, type MascotStyle } from "@/components/mascot/mascot";
+import { Sheet } from "@/components/ui/sheet";
+import { PlanChooser } from "@/components/ui/plan-picker";
 import { useDemo } from "@/lib/demo-store";
-import type { Plan } from "@/lib/plans";
+import { useLang } from "@/lib/i18n";
+import { PLAN_NAME, type Plan } from "@/lib/plans";
 
 /**
- * Locks a paid feature (PLUS or PRO). Below that plan, the real screen scrolls blurred
- * underneath while the offer card stays pinned in the middle of the screen.
+ * Locks a paid feature (Care or Coach). Below that plan, the real screen sits blurred in the
+ * background and the plan choice comes up as a popup over it, separate from the page. Closing
+ * the popup leaves one small button to bring it back; the tab bar stays usable.
  */
 export function ProGate({
   need = "pro",
@@ -25,32 +28,45 @@ export function ProGate({
   look?: MascotStyle;
   children: React.ReactNode;
 }) {
-  const { has } = useDemo();
-  const router = useRouter();
+  const { has, outfit } = useDemo();
+  const { t, tr } = useLang();
+  const [open, setOpen] = useState(true);
 
   if (has(need)) return <>{children}</>;
 
   return (
     <div className="relative">
-      {/* zero-height sticky anchor at the middle of the visible area (a little above center,
-          to balance the floating tab bar); the card is centered on it and follows the scroll */}
-      <div className="sticky top-[calc(50%-36px)] z-20 h-0">
-        <div className="absolute inset-x-5 top-0 -translate-y-1/2">
-          <motion.div
-            initial={{ opacity: 0, y: 24, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ type: "spring", stiffness: 360, damping: 28 }}
-            className="rounded-[32px] bg-surface px-6 pt-5 pb-5 shadow-lift"
-          >
-            <PlanOffer need={need} look={look} title={title} body={body} onLater={() => router.push("/")} />
-          </motion.div>
-        </div>
-      </div>
-
       {/* the real screen, blurred: a glimpse of what the plan gives you */}
       <div aria-hidden className="pointer-events-none blur-[6px] select-none opacity-60">
         {children}
       </div>
+
+      {/* closed the popup? one quiet button brings it back */}
+      {!open && (
+        <div className="sticky bottom-[calc(50%-24px)] z-20 flex justify-center">
+          <button
+            onClick={() => setOpen(true)}
+            className="pressable flex h-12 items-center gap-2 rounded-full bg-ocean px-5 text-[15px] font-semibold text-white shadow-lift"
+          >
+            <Lock className="size-4" strokeWidth={2.6} />
+            {t(`ปลดล็อกด้วย ${tr(PLAN_NAME[need])}`, `Unlock with ${tr(PLAN_NAME[need])}`)}
+          </button>
+        </div>
+      )}
+
+      <Sheet open={open} onOpenChange={setOpen}>
+        <PlanChooser
+          need={need}
+          heading={
+            <div className="flex flex-col items-center text-center">
+              <Mascot variant={look} outfit={outfit} size={110} />
+              <h2 className="mt-1 text-[19px] font-bold tracking-tight text-balance">{title}</h2>
+              <p className="mt-1 max-w-[280px] text-[14px] leading-relaxed text-balance text-muted">{body}</p>
+            </div>
+          }
+          onLater={() => setOpen(false)}
+        />
+      </Sheet>
     </div>
   );
 }

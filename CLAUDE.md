@@ -89,7 +89,7 @@ Demo first: everything should support the "skin cream shop on Shopee" demo story
 - **Alerts:** LINE Messaging API, through the LINE OA morning brief and urgent alerts. Only a simulated connect page exists (`components/shop/line-sheet.tsx`); do not call the real LINE API until asked.
 - **Deploy:** Vercel, with a QR code that links to the production URL.
 - **Plans (3 tiers):** ids `free` / `plus` / `pro` in code, shown as **Check up / Care / Coach** via `PLAN_NAME` / `PLAN_SHORT` in `lib/plans.ts`. Never hardcode plan names in copy; render `tr(PLAN_NAME[id])`. Badges: Check up plain, Care silver, Coach gold, no icon.
-  - Gate with `useDemo().has(need)`, `ProGate need=…`, or `PlanOffer need=…`. "Try" calls `upgrade(need)` (never downgrades).
+  - Gate with `useDemo().has(need)`, `ProGate need=…`, or `PlanOffer need=…`. Every "Try" goes through the plan popup (`useTryPlan()` / `usePlanPicker()`); never upgrade directly from a button.
   - Check up: health score (4 rings), 1 platform, says where the problem is, basic checklist, 10 copy checks/month.
   - Care: health score analysis (breakdown "why", issue steps/citations), customer insight (platform monitor insight), more platforms, Fix-it jobs, LINE, unlimited checks, chat, all looks, 12-month history.
   - Coach: Live analysis, Script check, CF data, Shield, appeals, Crisis, tax, multi-shop/admins, Rainbow look.
