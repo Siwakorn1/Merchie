@@ -5,7 +5,7 @@ Living status doc. **Update this file at the end of every work session**: what c
 _Last updated: 2026-11-11 (session 2, plans v2)_
 
 ## Latest polish
-- **Plan popup for every "Try":** `PlanPickerProvider` / `usePlanPicker` (`components/ui/plan-picker.tsx`, mounted in AppShell). `useTryPlan()` and `PlanOffer`'s button now open it: Care and Coach side by side with price and key features, the cheapest plan that unlocks the feature preselected (lower plans disabled), then "ทดลอง X ฟรี 7 วัน". Nothing upgrades until the shop confirms.
+- **Plan popup for every "Try":** `PlanPickerProvider` / `usePlanPicker` (`components/ui/plan-picker.tsx`, mounted in AppShell). `useTryPlan()` and `PlanOffer`'s button now open it: Care and Coach side by side with price and key features, the cheapest plan that unlocks the feature preselected (lower plans disabled), then "ทดลอง X ฟรีก่อนเลย" (no trial length, so demo visitors are not misled). Nothing upgrades until the shop confirms.
 - **Locked screens (`ProGate`)** show the page blurred with the plan choice in a bottom-sheet popup over it (separate from the page). "ไว้ก่อน" closes it and leaves one "ปลดล็อกด้วย X" button to reopen.
 - **Parts always add up:** `partsForScore` (`lib/health/score.ts`) re-splits a simulated total across the four parts by scaling each part's missing points, then rounds with largest remainder. Hero ring and breakdown sheet both use it, so the four parts always sum to the score shown (100 fills all four, 0 empties them).
 - **Demo panel** (top-right on Home) is just "จำลองคะแนนร้าน": a thick iOS-switch-style slider (`components/ui/thick-slider.tsx`, knob inset evenly, fill color follows the score) plus "Simulate: shop suspended". Plan and language switching moved out (Plan sheet / Shop settings).

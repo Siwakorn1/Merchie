@@ -54,7 +54,7 @@ export function usePlanPicker() {
 const noop = () => {};
 
 /**
- * The plan choice itself: paid plans as selectable cards, then "Try X free for 7 days".
+ * The plan choice itself: paid plans as selectable cards, then "Try X free".
  * Used inside the global popup and inside locked screens (ProGate).
  */
 export function PlanChooser({
@@ -77,7 +77,7 @@ export function PlanChooser({
 
   const start = () => {
     upgrade(pick);
-    toast(t(`ยินดีต้อนรับสู่ ${tr(PLAN_NAME[pick])}`, `Welcome to ${tr(PLAN_NAME[pick])}`), t("ทดลองฟรี 7 วัน", "7-day free trial"));
+    toast(t(`ยินดีต้อนรับสู่ ${tr(PLAN_NAME[pick])}`, `Welcome to ${tr(PLAN_NAME[pick])}`), t("ทดลองฟรีก่อนเลย", "Free to try"));
     onDone?.();
   };
 
@@ -145,7 +145,7 @@ export function PlanChooser({
         className="pressable mt-5 h-12 w-full rounded-full bg-ocean text-[15px] font-semibold text-white shadow-lift"
       >
         {plan === "free" || PLAN_RANK[pick] > PLAN_RANK[plan]
-          ? t(`ทดลอง ${tr(PLAN_NAME[pick])} ฟรี 7 วัน`, `Try ${tr(PLAN_NAME[pick])} free for 7 days`)
+          ? t(`ทดลอง ${tr(PLAN_NAME[pick])} ฟรีก่อนเลย`, `Try ${tr(PLAN_NAME[pick])} free`)
           : t(`ใช้ ${tr(PLAN_NAME[pick])}`, `Use ${tr(PLAN_NAME[pick])}`)}
       </button>
       {onLater && (

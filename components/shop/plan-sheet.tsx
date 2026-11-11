@@ -66,7 +66,7 @@ export function PlanSheet({ open, onOpenChange }: { open: boolean; onOpenChange:
           setPlan(view);
           toast(
             t(`เปลี่ยนเป็น ${tr(PLAN_NAME[view])} แล้ว`, `Switched to ${tr(PLAN_NAME[view])}`),
-            view === "free" ? undefined : t("ทดลองฟรี 7 วัน", "7-day free trial"),
+            view === "free" ? undefined : t("ทดลองฟรีก่อนเลย", "Free to try"),
           );
           onOpenChange(false);
         }}
@@ -78,7 +78,7 @@ export function PlanSheet({ open, onOpenChange }: { open: boolean; onOpenChange:
         {current
           ? t("แพ็กเกจปัจจุบัน", "Current plan")
           : PLAN_RANK[view] > PLAN_RANK[plan]
-            ? t(`ทดลอง ${tr(PLAN_NAME[view])} ฟรี 7 วัน`, `Try ${tr(PLAN_NAME[view])} free for 7 days`)
+            ? t(`ทดลอง ${tr(PLAN_NAME[view])} ฟรีก่อนเลย`, `Try ${tr(PLAN_NAME[view])} free`)
             : t(`เปลี่ยนเป็น ${tr(PLAN_NAME[view])}`, `Switch to ${tr(PLAN_NAME[view])}`)}
       </button>
     </Sheet>
