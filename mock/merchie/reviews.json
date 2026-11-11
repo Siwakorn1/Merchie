@@ -1,0 +1,236 @@
+{
+  "_mock": "Review feed per platform for the monitor screen. Shopee items follow v2.product.get_comment (buyer_username masked the way Shopee masks it); TikTok Shop items are mapped to the same shape. 'dist' is the 30-day star distribution. 'issue' links a review to an open issue in lib/content/issues.ts.",
+  "shopee": {
+    "dist": {
+      "5": 165,
+      "4": 27,
+      "3": 8,
+      "2": 8,
+      "1": 6
+    },
+    "comments": [
+      {
+        "id": 88121,
+        "user": "p*****a",
+        "star": 1,
+        "text": "แพ้ หน้าพัง ใช้ไป 2 วันขึ้นผื่นแดงเต็มหน้า แสบมาก ใครจะซื้อคิดดีๆ",
+        "item": 2310045,
+        "date": "2569-11-11",
+        "reply": null,
+        "issue": "review-allergy"
+      },
+      {
+        "id": 88130,
+        "user": "n*****y",
+        "star": 5,
+        "text": "ครีมหอมอ่อนๆ ทาแล้วหน้าชุ่มชื้นทั้งวัน ซื้อซ้ำรอบที่ 3 แล้ว",
+        "item": 2310045,
+        "date": "2569-11-10",
+        "reply": "ขอบคุณที่ไว้ใจใสใสนะคะ"
+      },
+      {
+        "id": 88128,
+        "user": "j*****r",
+        "star": 4,
+        "text": "เซรั่มดีค่ะ แต่ขวดเล็กไปนิด",
+        "item": 2310052,
+        "date": "2569-11-10",
+        "reply": null
+      },
+      {
+        "id": 88125,
+        "user": "t*****t",
+        "star": 5,
+        "text": "แพ็คของดีมาก ห่อกันกระแทกมาอย่างดี",
+        "item": 2310045,
+        "date": "2569-11-09",
+        "reply": "ขอบคุณค่ะ"
+      },
+      {
+        "id": 88117,
+        "user": "k*****n",
+        "star": 2,
+        "text": "ส่งช้ามาก รอ 6 วัน",
+        "item": 2310060,
+        "date": "2569-11-09",
+        "reply": null,
+        "issue": "review-late"
+      },
+      {
+        "id": 88119,
+        "user": "s*****o",
+        "star": 3,
+        "text": "ก็โอเค ยังไม่เห็นผลชัด",
+        "item": 2310052,
+        "date": "2569-11-08",
+        "reply": null
+      },
+      {
+        "id": 88112,
+        "user": "b*****m",
+        "star": 5,
+        "text": "กันแดดไม่เหนอะหนะ ไม่วอก ชอบมาก",
+        "item": 2310060,
+        "date": "2569-11-07",
+        "reply": "ดีใจที่ชอบนะคะ"
+      },
+      {
+        "id": 88109,
+        "user": "a*****k",
+        "star": 5,
+        "text": "ส่งไว ของแท้ มีเลขจดแจ้ง",
+        "item": 2310045,
+        "date": "2569-11-06",
+        "reply": null
+      },
+      {
+        "id": 88102,
+        "user": "m*****e",
+        "star": 5,
+        "text": "ใช้ดีค่ะ เนื้อบางเบา ซึมไว",
+        "item": 2310060,
+        "date": "2569-11-05",
+        "reply": "ขอบคุณมากนะคะ"
+      },
+      {
+        "id": 88105,
+        "user": "w*****i",
+        "star": 4,
+        "text": "ใช้ได้ดี แต่กลิ่นแรงไปหน่อย",
+        "item": 2310045,
+        "date": "2569-11-05",
+        "reply": "ขอบคุณสำหรับคำแนะนำค่ะ จะนำไปปรับปรุงนะคะ"
+      },
+      {
+        "id": 88098,
+        "user": "c*****a",
+        "star": 2,
+        "text": "ทาแล้วเป็นสิวเล็กๆ ไม่แน่ใจว่าเพราะครีมไหม",
+        "item": 2310045,
+        "date": "2569-11-04",
+        "reply": null
+      },
+      {
+        "id": 88094,
+        "user": "f*****n",
+        "star": 5,
+        "text": "ผิวดูชุ่มชื้นขึ้นค่ะ ใช้คู่กับเซรั่ม",
+        "item": 2310052,
+        "date": "2569-11-03",
+        "reply": "ขอบคุณมากค่ะ"
+      }
+    ],
+    "themes": {
+      "good": [
+        "เนื้อบางเบา ซึมไว",
+        "แพ็คของดี",
+        "ซื้อซ้ำ"
+      ],
+      "bad": [
+        "ส่งช้า",
+        "แพ้ หรือเป็นสิว"
+      ],
+      "good_en": [
+        "Light, absorbs fast",
+        "Careful packing",
+        "Repeat buyers"
+      ],
+      "bad_en": [
+        "Slow delivery",
+        "Allergy, breakouts"
+      ]
+    }
+  },
+  "tiktok": {
+    "dist": {
+      "5": 44,
+      "4": 8,
+      "3": 3,
+      "2": 2,
+      "1": 1
+    },
+    "comments": [
+      {
+        "id": 7001,
+        "user": "u*****8",
+        "star": 5,
+        "text": "เห็นในไลฟ์แล้วสั่งเลย ใช้ดีจริง",
+        "item": 2310045,
+        "date": "2569-11-11",
+        "reply": "ขอบคุณที่ดูไลฟ์นะคะ"
+      },
+      {
+        "id": 7002,
+        "user": "m*****x",
+        "star": 5,
+        "text": "กันแดดเนื้อดี ราคาโอเค",
+        "item": 2310060,
+        "date": "2569-11-10",
+        "reply": null
+      },
+      {
+        "id": 7003,
+        "user": "r*****e",
+        "star": 2,
+        "text": "ฝาครีมแตกมา",
+        "item": 2310045,
+        "date": "2569-11-09",
+        "reply": null
+      },
+      {
+        "id": 7004,
+        "user": "z*****a",
+        "star": 4,
+        "text": "ส่งไว แพ็คดี",
+        "item": 2310052,
+        "date": "2569-11-08",
+        "reply": "ขอบคุณค่ะ"
+      },
+      {
+        "id": 7005,
+        "user": "k*****o",
+        "star": 3,
+        "text": "ขนาดเล็กกว่าที่คิด",
+        "item": 2310052,
+        "date": "2569-11-07",
+        "reply": null
+      },
+      {
+        "id": 7006,
+        "user": "p*****p",
+        "star": 5,
+        "text": "ชอบมาก จะซื้ออีก",
+        "item": 2310045,
+        "date": "2569-11-06",
+        "reply": null
+      },
+      {
+        "id": 7007,
+        "user": "l*****n",
+        "star": 5,
+        "text": "ซึมไวไม่มัน",
+        "item": 2310060,
+        "date": "2569-11-05",
+        "reply": "ดีใจที่ชอบนะคะ"
+      }
+    ],
+    "themes": {
+      "good": [
+        "ซื้อจากไลฟ์",
+        "ซึมไวไม่มัน"
+      ],
+      "bad": [
+        "ของเสียหายระหว่างส่ง",
+        "ขนาดเล็ก"
+      ],
+      "good_en": [
+        "Bought from live",
+        "Absorbs fast, not oily"
+      ],
+      "bad_en": [
+        "Damaged in transit",
+        "Smaller than expected"
+      ]
+    }
+  }
+}

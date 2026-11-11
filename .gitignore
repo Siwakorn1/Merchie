@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# FC Minimal: not used, license needs a donation for commercial use
+app/fonts/FCMinimal-*.ttf

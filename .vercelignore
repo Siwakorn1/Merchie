@@ -1,0 +1,8 @@
+# Not part of the deployed app
+node_modules
+.next
+# FC Minimal is no longer loaded, and its license needs a donation for commercial use: keep it local
+app/fonts/FCMinimal-*.ttf
+.DS_Store
+*.pem
+.env*.local

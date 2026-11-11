@@ -1,0 +1,43 @@
+{
+  "_mock": "Shaped like Shopee v2.product.get_comment. buyer_username is masked the way Shopee masks it.",
+  "request_id": "mock-cm-001",
+  "error": "",
+  "message": "",
+  "response": {
+    "item_comment_list": [
+      {
+        "comment_id": 88121,
+        "comment": "แพ้ หน้าพัง ใช้ไป 2 วันขึ้นผื่นแดงเต็มหน้า แสบมาก ใครจะซื้อคิดดีๆ",
+        "buyer_username": "p*****a",
+        "order_sn": "251109ABCD1234",
+        "item_id": 2310045,
+        "rating_star": 1,
+        "create_time": 1762819200,
+        "comment_reply": null
+      },
+      {
+        "comment_id": 88117,
+        "comment": "ส่งช้ามาก รอ 6 วัน",
+        "buyer_username": "k*****n",
+        "order_sn": "251105EFGH5678",
+        "item_id": 2310060,
+        "rating_star": 2,
+        "create_time": 1762646400,
+        "comment_reply": null
+      },
+      {
+        "comment_id": 88102,
+        "comment": "ใช้ดีค่ะ เนื้อบางเบา ซึมไว",
+        "buyer_username": "m*****e",
+        "order_sn": "251101IJKL9012",
+        "item_id": 2310060,
+        "rating_star": 5,
+        "create_time": 1762300800,
+        "comment_reply": { "reply": "ขอบคุณมากนะคะ", "hidden": false, "create_time": 1762304400 }
+      }
+    ],
+    "more": false,
+    "next_cursor": ""
+  },
+  "summary_30d": { "total": 214, "avg_star": 4.6, "negative": 26 }
+}

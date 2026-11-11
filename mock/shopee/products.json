@@ -1,0 +1,34 @@
+{
+  "_mock": "Shaped like Shopee v2.product.get_item_base_info.",
+  "request_id": "mock-pd-001",
+  "error": "",
+  "message": "",
+  "response": {
+    "item_list": [
+      {
+        "item_id": 2310045,
+        "item_name": "ครีมไวท์เทนนิ่ง ใสใส 30 ml",
+        "item_status": "NORMAL",
+        "description": "ขาวใน 7 วัน รักษาฝ้า กระ จุดด่างดำหายถาวร เห็นผลตั้งแต่ครั้งแรก ปลอดภัย 100%",
+        "price_info": [{ "current_price": 390 }],
+        "sales": 1284
+      },
+      {
+        "item_id": 2310052,
+        "item_name": "เซรั่มไฮยา ใสใส 15 ml",
+        "item_status": "NORMAL",
+        "description": "ผิวชุ่มชื้น อิ่มน้ำ ใช้ได้ทุกวัน",
+        "price_info": [{ "current_price": 290 }],
+        "sales": 642
+      },
+      {
+        "item_id": 2310060,
+        "item_name": "กันแดด ใสใส SPF50 PA++++",
+        "item_status": "NORMAL",
+        "description": "บางเบา ไม่เหนอะหนะ",
+        "price_info": [{ "current_price": 350 }],
+        "sales": 917
+      }
+    ]
+  }
+}

@@ -1,26 +1,416 @@
 @import "tailwindcss";
 
+/*
+ * Merchie design tokens
+ * Brand blues (CI) and health-status colors are kept in separate groups.
+ * Never use a status color for brand chrome, or a brand blue for status.
+ */
+@theme {
+  /* Brand (CI) */
+  --color-deep: #499df3;
+  --color-sky: #7db7f7;
+  --color-haze: #a4c6f9;
+  --color-cloud: #aad4fa;
+  --color-glow: #ecf8fd;
+  --color-ink: #0a0a0a;
+  --color-ocean: #1b6fd8; /* buttons + text on light backgrounds */
+
+  /* Neutrals derived from the brand */
+  --color-canvas: #f3f9fe; /* app background */
+  --color-surface: #ffffff; /* cards */
+  --color-line: #e2edf9; /* hairlines, tracks */
+  --color-muted: #5b6b82; /* secondary text, 5.4:1 on white */
+  --color-subtle: #8a99ad; /* tertiary text, captions only */
+
+  /* Health status: base (rings, fills) · soft (pill bg) · ink (text, AA on soft + white) */
+  --color-good: #2fbf71;
+  --color-good-soft: #e3f6ec;
+  --color-good-ink: #157a43;
+  --color-watch: #ffb547;
+  --color-watch-soft: #fff1db;
+  --color-watch-ink: #9a5b00;
+  --color-danger: #ff5d5d;
+  --color-danger-soft: #ffe7e7;
+  --color-danger-ink: #c62f2f;
+
+  /* Type */
+  --font-sans: var(--font-anuphan), ui-sans-serif, system-ui, sans-serif;
+  --font-round: var(--font-fredoka), var(--font-anuphan), ui-rounded, sans-serif;
+
+  /* Shape */
+  --radius-card: 28px;
+  --radius-tile: 20px;
+  --radius-chip: 14px;
+
+  /* Soft tinted elevation instead of borders (tint follows the theme) */
+  --shadow-soft: 0 1px 2px rgb(var(--tint) / 0.05), 0 8px 24px -10px rgb(var(--tint) / 0.18);
+  --shadow-lift: 0 2px 4px rgb(var(--tint) / 0.07), 0 16px 40px -12px rgb(var(--tint) / 0.26);
+
+  /* Desktop: render the app inside a phone frame above this width */
+  --breakpoint-frame: 500px;
+
+  /* Motion */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Safe areas as variables, so the desktop phone frame can fake an iPhone's insets */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --safe-top: env(safe-area-inset-top);
+  --safe-bottom: env(safe-area-inset-bottom);
+
+  /* theme-driven extras */
+  --tint: 27 111 216;
+  --sky-1: #b9d8fb;
+  --sky-2: #d3e7fc;
+  --sky-3: #e8f3fe;
+  --sky-4: #f3f9ff;
+  --sky-5: #f8fbff;
+  --stage-1: #7db7f7;
+  --stage-2: #499df3;
+  --stage-3: #1b6fd8;
+  --glass-edge: rgb(255 255 255 / 0.55);
+  --glass-hi: rgb(255 255 255 / 0.75);
+
+  /* chart series (validated for CVD + contrast; fixed across accents so platforms stay distinct) */
+  /* plan badges: metals that rank at a glance (cloud, silver, gold) */
+  --plan-silver-1: #f1f4f8;
+  --plan-silver-2: #b8c2d0;
+  --plan-silver-ink: #364152;
+  --plan-gold-1: #ffe9a3;
+  --plan-gold-2: #d99a1e;
+  --plan-gold-ink: #4f3200;
+  --chart-1: #1b6fd8;
+  --chart-2: #12a094;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ---------- Themes ----------
+ * data-accent on <html> follows Merchie's look (blue / red / green / yellow / violet).
+ * data-theme="dark" swaps the neutrals. Status colors keep their meaning in every theme;
+ * accent greens and golds are deliberately deeper than the status green / amber.
+ */
+html[data-accent="green"] {
+  --color-ocean: #0e7a53;
+  --color-deep: #23a673;
+  --color-sky: #7ed3ac;
+  --color-haze: #a8e3c8;
+  --color-cloud: #c3edd9;
+  --color-glow: #e7f7ef;
+  --color-canvas: #f1faf5;
+  --color-line: #dceee4;
+  --tint: 14 122 83;
+  --sky-1: #b3e6cd;
+  --sky-2: #ccefdc;
+  --sky-3: #e4f7ed;
+  --sky-4: #f1fbf6;
+  --sky-5: #f7fdf9;
+  --stage-1: #7ed3ac;
+  --stage-2: #23a673;
+  --stage-3: #0e7a53;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html[data-accent="red"] {
+  /* rose crimson: deeper and cooler than the status red (#FF5D5D) */
+  --color-ocean: #b3123a;
+  --color-deep: #e0405f;
+  --color-sky: #f5909f;
+  --color-haze: #f8b6c0;
+  --color-cloud: #fbd2d8;
+  --color-glow: #fdecef;
+  --color-canvas: #fff5f6;
+  --color-line: #f6dde1;
+  --tint: 179 18 58;
+  --sky-1: #fbc7cf;
+  --sky-2: #fcdade;
+  --sky-3: #feedf0;
+  --sky-4: #fff6f7;
+  --sky-5: #fffafb;
+  --stage-1: #f5909f;
+  --stage-2: #e0405f;
+  --stage-3: #b3123a;
+}
+
+html[data-accent="yellow"] {
+  --color-ocean: #8a5a00;
+  --color-deep: #e3a400;
+  --color-sky: #f7d46a;
+  --color-haze: #fae3a0;
+  --color-cloud: #fcedbf;
+  --color-glow: #fff6da;
+  --color-canvas: #fffbf0;
+  --color-line: #f2e8c9;
+  --tint: 170 120 0;
+  --sky-1: #fde7a3;
+  --sky-2: #fef0c4;
+  --sky-3: #fff7e0;
+  --sky-4: #fffbef;
+  --sky-5: #fffdf7;
+  --stage-1: #fbd977;
+  --stage-2: #f0b429;
+  --stage-3: #c98a00;
+}
+
+html[data-accent="violet"] {
+  /* rainbow Merchie (เมฆทอง only): violet chrome over a soft pastel-rainbow sky */
+  --color-ocean: #6b3fd4;
+  --color-deep: #8b5cf6;
+  --color-sky: #b9a3fb;
+  --color-haze: #d6c9fd;
+  --color-cloud: #e6ddfe;
+  --color-glow: #f3eeff;
+  --color-canvas: #fbf9ff;
+  --color-line: #e9e2fb;
+  --tint: 107 63 212;
+  --sky-1: #ffd6e5;
+  --sky-2: #ecdfff;
+  --sky-3: #dfeeff;
+  --sky-4: #effbf4;
+  --sky-5: #fffdf3;
+  --stage-1: #ffb3c7;
+  --stage-2: #a98bff;
+  --stage-3: #5b8cf0;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --color-ink: #eef3fa;
+  --color-surface: #161e2b;
+  --color-canvas: #0c121c;
+  --color-line: #263347;
+  --color-muted: #9daabd;
+  --color-subtle: #6f7c91;
+  --color-glow: #1c283b;
+  --color-ocean: #3d8cf0;
+  --color-good-soft: #133526;
+  --color-good-ink: #63dd9c;
+  --color-watch-soft: #3a2d12;
+  --color-watch-ink: #ffc870;
+  --color-danger-soft: #3d1c20;
+  --color-danger-ink: #ff9090;
+  --tint: 0 0 0;
+  --glass-edge: rgb(255 255 255 / 0.12);
+  --glass-hi: rgb(255 255 255 / 0.16);
+  --chart-1: #4a7fe6;
+  --chart-2: #12a094;
+  --sky-1: #12305a;
+  --sky-2: #10223f;
+  --sky-3: #0e1829;
+  --sky-4: #0c121c;
+  --sky-5: #0c121c;
+}
+html[data-theme="dark"][data-accent="green"] {
+  --color-ocean: #2bb57e;
+  --color-glow: #16302a;
+  --sky-1: #0f3a2b;
+  --sky-2: #0e2620;
+}
+html[data-theme="dark"][data-accent="red"] {
+  --color-ocean: #f0587a;
+  --color-glow: #3a1a24;
+  --sky-1: #3d1222;
+  --sky-2: #26101a;
+}
+html[data-theme="dark"][data-accent="violet"] {
+  --color-ocean: #a58bff;
+  --color-glow: #2a2140;
+  --sky-1: #2e1f3d;
+  --sky-2: #1c1a2e;
+}
+html[data-theme="dark"][data-accent="yellow"] {
+  --color-ocean: #e0a210;
+  --color-glow: #33290f;
+  --sky-1: #3b2f0c;
+  --sky-2: #251f0e;
+}
+
+/* ---------- Native-app feel ---------- */
+html,
+body {
+  overscroll-behavior: none;
+  /* never pan sideways: the app is one column, like a phone */
+  overflow-x: clip;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  -webkit-text-size-adjust: 100%;
+}
+
+html {
+  color-scheme: light;
+}
+
+/* smooth theme switches */
+body,
+.sky {
+  transition:
+    background-color 300ms ease,
+    color 300ms ease;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Inputs >= 16px so iOS Safari never zooms on focus */
+input,
+select,
+textarea {
+  font-size: max(16px, 1em);
+}
+
+/* ---------- Utilities ---------- */
+
+/* Soft sky: a light blue wash at the top that fades down, with a few white cloud puffs */
+@utility sky {
+  background-color: var(--sky-5);
+  background-image: linear-gradient(
+    180deg,
+    var(--sky-1) 0%,
+    var(--sky-2) 18%,
+    var(--sky-3) 38%,
+    var(--sky-4) 58%,
+    var(--sky-5) 100%
+  );
+  background-repeat: no-repeat;
+}
+
+/* Clear glass for the floating tab bar: very see-through, strong blur, a bright top edge
+   like light catching glass. Edge strength follows the theme. */
+@utility glass-bar {
+  background-color: color-mix(in srgb, var(--color-surface) 22%, transparent);
+  -webkit-backdrop-filter: blur(22px) saturate(1.9);
+  backdrop-filter: blur(22px) saturate(1.9);
+  border: 1px solid var(--glass-edge);
+  box-shadow:
+    inset 0 1px 0 var(--glass-hi),
+    inset 0 -1px 0 color-mix(in srgb, var(--glass-hi) 35%, transparent),
+    0 12px 32px -12px rgb(var(--tint) / 0.32);
+}
+
+/* UI chrome: headers, tab bars, buttons, cards */
+@utility chrome {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* Press feedback for anything tappable (never rely on hover) */
+@utility pressable {
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: pointer;
+  transition: transform 160ms var(--ease-spring);
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility num {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* Safe-area helpers */
+@utility pt-safe {
+  padding-top: var(--safe-top);
+}
+@utility pb-safe {
+  padding-bottom: var(--safe-bottom);
+}
+@utility px-safe {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* ---------- Rainbow Royal (เมฆทอง look): aurora sky with twinkling sparkles ----------
+ * Only when data-accent="violet". Layers drift slowly; sparkles sit behind all content
+ * (isolation + z-index -1) and twinkle in two offset sets. Off for reduced motion.
+ */
+html[data-accent="violet"] {
+  --aurora-a: 0.7;
+  --spark: rgb(255 255 255 / 0.95);
+}
+html[data-theme="dark"][data-accent="violet"] {
+  --aurora-a: 0.22;
+  --spark: rgb(255 255 255 / 0.7);
+}
+html[data-accent="violet"] .sky {
+  isolation: isolate;
+  background-image:
+    radial-gradient(55% 34% at 12% 4%, rgb(255 168 196 / var(--aurora-a)), transparent 70%),
+    radial-gradient(50% 30% at 45% 0%, rgb(255 236 150 / var(--aurora-a)), transparent 70%),
+    radial-gradient(55% 36% at 88% 6%, rgb(150 205 255 / var(--aurora-a)), transparent 70%),
+    radial-gradient(48% 30% at 72% 28%, rgb(170 236 196 / var(--aurora-a)), transparent 70%),
+    radial-gradient(52% 32% at 22% 30%, rgb(196 172 255 / var(--aurora-a)), transparent 70%),
+    linear-gradient(180deg, var(--sky-2) 0%, var(--sky-4) 55%, var(--sky-5) 100%);
+  background-size:
+    170% 100%,
+    170% 100%,
+    170% 100%,
+    170% 100%,
+    170% 100%,
+    100% 100%;
+  animation: aurora 22s ease-in-out infinite alternate;
+}
+html[data-accent="violet"] .sky::before,
+html[data-accent="violet"] .sky::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 45% 0;
+  z-index: -1;
+  pointer-events: none;
+  background-repeat: no-repeat;
+  animation: twinkle 3.2s ease-in-out infinite;
+}
+html[data-accent="violet"] .sky::before {
+  background-image:
+    radial-gradient(circle at 14% 18%, var(--spark) 0 1.6px, transparent 2.4px),
+    radial-gradient(circle at 38% 9%, var(--spark) 0 1.2px, transparent 2px),
+    radial-gradient(circle at 63% 22%, var(--spark) 0 1.8px, transparent 2.6px),
+    radial-gradient(circle at 86% 12%, var(--spark) 0 1.3px, transparent 2.1px),
+    radial-gradient(circle at 76% 48%, var(--spark) 0 1.1px, transparent 1.9px),
+    radial-gradient(circle at 24% 52%, var(--spark) 0 1.4px, transparent 2.2px);
+}
+html[data-accent="violet"] .sky::after {
+  animation-delay: -1.6s;
+  background-image:
+    radial-gradient(circle at 8% 38%, var(--spark) 0 1.2px, transparent 2px),
+    radial-gradient(circle at 30% 30%, var(--spark) 0 1.7px, transparent 2.5px),
+    radial-gradient(circle at 52% 6%, var(--spark) 0 1.3px, transparent 2.1px),
+    radial-gradient(circle at 70% 34%, var(--spark) 0 1.5px, transparent 2.3px),
+    radial-gradient(circle at 93% 30%, var(--spark) 0 1.8px, transparent 2.6px),
+    radial-gradient(circle at 46% 58%, var(--spark) 0 1.1px, transparent 1.9px);
+}
+@keyframes aurora {
+  0% {
+    background-position: 0% 0, 50% 0, 100% 0, 80% 0, 20% 0, 0 0;
+  }
+  100% {
+    background-position: 60% 0, 0% 0, 40% 0, 10% 0, 90% 0, 0 0;
+  }
+}
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-accent="violet"] .sky,
+  html[data-accent="violet"] .sky::before,
+  html[data-accent="violet"] .sky::after {
+    animation: none;
+  }
 }

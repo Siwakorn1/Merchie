@@ -1,0 +1,52 @@
+{
+  "_mock": "Shaped like Shopee Open Platform v2.account_health.* responses. Field names must be re-checked against the real API once access is approved.",
+  "get_shop_penalty": {
+    "request_id": "mock-ah-001",
+    "error": "",
+    "message": "",
+    "response": {
+      "penalty_points": {
+        "overall_penalty_points": 8,
+        "non_fulfillment_rate": 2,
+        "late_shipment_rate": 3,
+        "listing_violations": 3,
+        "opf_violations": 0,
+        "others": 0
+      },
+      "ongoing_punishment": []
+    }
+  },
+  "penalty_tiers": [
+    { "points": 3, "punishment": "ลดการมองเห็นสินค้า", "punishment_en": "lower visibility" },
+    { "points": 6, "punishment": "ไม่ได้เข้าร่วมแคมเปญ", "punishment_en": "no campaigns" },
+    { "points": 9, "punishment": "ซ่อนสินค้าทั้งหมด 7 วัน", "punishment_en": "all listings hidden for 7 days" },
+    { "points": 12, "punishment": "ระงับการขาย 14 วัน", "punishment_en": "selling suspended 14 days" },
+    { "points": 15, "punishment": "ระงับการขาย 28 วัน", "punishment_en": "selling suspended 28 days" }
+  ],
+  "shop_performance": {
+    "request_id": "mock-ah-002",
+    "error": "",
+    "message": "",
+    "response": {
+      "overall_performance": { "rating": 3, "fulfillment_failed": 0, "listing_failed": 1, "custom_service_failed": 1 },
+      "metric_list": [
+        { "metric_id": 1, "metric_name": "late_shipment_rate", "current_period": 6.2, "last_period": 4.1, "unit": 2, "target": { "value": 10, "comparator": "<" } },
+        { "metric_id": 3, "metric_name": "non_fulfillment_rate", "current_period": 3.4, "last_period": 2.8, "unit": 2, "target": { "value": 10, "comparator": "<" } },
+        { "metric_id": 11, "metric_name": "chat_response_rate", "current_period": 61, "last_period": 74, "unit": 2, "target": { "value": 70, "comparator": ">=" } },
+        { "metric_id": 21, "metric_name": "shop_rating", "current_period": 4.6, "last_period": 4.8, "unit": 1, "target": { "value": 4.5, "comparator": ">=" } }
+      ]
+    }
+  },
+  "get_listings_with_issues": {
+    "request_id": "mock-ah-003",
+    "error": "",
+    "message": "",
+    "response": {
+      "listing_list": [
+        { "item_id": 2310045, "reason": "prohibited_claim" },
+        { "item_id": 2310052, "reason": "missing_registration_number" }
+      ],
+      "total_count": 2
+    }
+  }
+}
