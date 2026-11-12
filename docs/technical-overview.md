@@ -93,7 +93,7 @@ fixed.
 
 | | Check up | Care | Coach | Business |
 |---|---|---|---|---|
-| Price | Free | ฿199/mo | ฿1,199/mo | ฿11,199/mo |
+| Price | Free | ฿199/mo | ฿1,199/mo | ฿11,999/mo |
 | Health score (4 parts) | ✓ | ✓ | ✓ | ✓ |
 | Fix-it one-tap fixes | – | 10/month | unlimited | unlimited |
 | Platforms | 1 | 3 | all | all + many shops |

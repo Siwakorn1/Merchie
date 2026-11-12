@@ -5,7 +5,7 @@ import { l, type L } from "@/lib/i18n-core";
  *  - Check up (free): the daily health score, one platform
  *  - Care (Tier 1, ฿199): score analysis, customer insight, 10 one-tap fixes a month, 3 platforms
  *  - Coach (Tier 2, ฿1,199): unlimited fixes, every platform, Live Coach, Shield included, 3 seats
- *  - Business (฿11,199): many shops, unlimited seats, reseller listing checks, monthly
+ *  - Business (฿11,999): many shops, unlimited seats, reseller listing checks, monthly
  *    report with an account manager
  * Code keeps the ids free / plus / pro / business; only PLAN_NAME / PLAN_SHORT are shown.
  */
@@ -92,7 +92,7 @@ export const PLANS: PlanInfo[] = [
   },
   {
     id: "business",
-    price: l("฿11,199/เดือน", "฿11,199 / month"),
+    price: l("฿11,999/เดือน", "฿11,999 / month"),
     forWho: l("SME หรือแบรนด์ที่มีตัวแทนขาย", "SMEs and brands with resellers"),
     features: [
       l("ทุกแพลตฟอร์ม หลายร้าน", "Every platform, many shops"),

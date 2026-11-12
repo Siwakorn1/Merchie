@@ -8,7 +8,7 @@ _Last updated: 2026-11-11 (end of session 2)_
 - Wrote `docs/technical-overview.md`: current stack and folder map, plan table, what each platform API needs (developer app review + seller OAuth; Shopee has a sandbox; LINE can start now), social listening (Wisesight Zocial Eye covers Pantip; Merchie does own-channel listening in phase 1, partner data in phase 2), and the AI plan (Claude: Opus 5.5 for legal outputs, Sonnet 5.5 or low-effort Opus for chat, Haiku 5.5 for bulk review classification; caching, batch, structured outputs; under ~$2 per Care shop per month).
 
 ## Plans v3: four tiers (owner's table, 2569-11-12)
-- **Check up (free) / Care (฿199) / Coach (฿1,199) / Business (฿11,199)** (prices updated from the owner's slide, 2569-11-12), ids `free` / `plus` / `pro` / `business` in `lib/plans.ts`. Business badge is deep navy (`--plan-biz-*` tokens).
+- **Check up (free) / Care (฿199) / Coach (฿1,199) / Business (฿11,999)** (prices updated from the owner's slide, 2569-11-12), ids `free` / `plus` / `pro` / `business` in `lib/plans.ts`. Business badge is deep navy (`--plan-biz-*` tokens).
 - **Limits** (`PLATFORM_LIMIT`, `FIX_LIMIT`, `SEAT_LIMIT`, `planFor()` picks the cheapest plan above a usage):
   - Platforms 1 / 3 / unlimited / unlimited (Business also many shops).
   - Fix-it one-tap fixes 0 / 10 per month / unlimited / unlimited. Care shows "เหลือ x/10 เดือนนี้"; when used up, a fix opens the Coach offer. Usage = `fixesUsed` (resolved issues) in the demo store.
