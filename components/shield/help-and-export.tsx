@@ -21,7 +21,7 @@ export function HelpSection({
   gate = (_id, then) => then(),
 }: {
   onAppeal: () => void;
-  /** pay-per-case check before a case opens (Check-up / Care) */
+  /** pay-per-case check before a case opens (Check up / Care) */
   gate?: (caseId: string, then: () => void) => void;
 }) {
   const { t, tr } = useLang();

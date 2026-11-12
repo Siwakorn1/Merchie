@@ -5,7 +5,7 @@ import { PLAN_SHORT, type Plan } from "@/lib/plans";
 import { cn } from "@/lib/utils";
 
 /**
- * The plan as a short badge that ranks at a glance: Check-up is plain, Care is brushed silver,
+ * The plan as a short badge that ranks at a glance: Check up is plain, Care is brushed silver,
  * Coach is gold, Business is deep navy. No icon. Metal colors come from --plan-* tokens.
  */
 export function PlanBadge({

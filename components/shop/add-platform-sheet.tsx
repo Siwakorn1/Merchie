@@ -55,7 +55,7 @@ export const platformLabel = (id: PlatformId, t: (th: string, en: string) => str
 /**
  * Add a platform: pick one, then a mock of the platform's OAuth consent
  * (sign in to the shop, see what Merchie may read, allow). Each plan has a platform limit
- * (Check-up 1, Care 3, Coach and Business unlimited).
+ * (Check up 1, Care 3, Coach and Business unlimited).
  */
 export function AddPlatformSheet({ open, onOpenChange }: { open: boolean; onOpenChange: (o: boolean) => void }) {
   const { t, tr } = useLang();

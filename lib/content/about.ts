@@ -11,7 +11,7 @@ export const WHATS_NEW: { version: string; date: L; items: L[] }[] = [
     version: "0.9.0",
     date: l("11 พ.ย. 2569", "11 Nov 2026"),
     items: [
-      l("แพ็กเกจใหม่: Check-up, Care, Coach และ Business", "New plans: Check-up, Care, Coach and Business"),
+      l("แพ็กเกจใหม่: Check up, Care, Coach และ Business", "New plans: Check up, Care, Coach and Business"),
       l("สรุปทุกเช้าทาง LINE", "Morning brief on LINE"),
       l("คะแนนรายเดือน พร้อมเทียบกับร้านหมวดเดียวกัน", "Monthly score, compared with similar shops"),
       l("น้อง Merchie ราชินีสายรุ้ง สำหรับ Coach", "Rainbow Royal Merchie for Coach"),

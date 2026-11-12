@@ -30,11 +30,17 @@ export function answer(raw: string, ctx: Ctx): Reply {
   const open = (id: string) => ctx.openIssues.some((i) => i.id === id);
 
   // Guardrail first: never help threaten, expose, or accuse a customer.
-  if (has(q, ["ขู่", "ฟ้อง", "ด่า", "ประจาน", "แฉ", "เบอร์ลูกค้า", "ที่อยู่ลูกค้า", "threat", "sue", "expose", "shame", "dox"])) {
+  if (
+    has(q, [
+      "ขู่", "ฟ้อง", "ด่า", "ประจาน", "แฉ", "เบอร์ลูกค้า", "ที่อยู่ลูกค้า",
+      "ใช้ผิดวิธี", "ลูกค้าผิด", "โทษลูกค้า", "โกง", "มั่ว", "ใส่ร้าย",
+      "threat", "sue", "expose", "shame", "dox", "blame", "accuse", "their fault", "used it wrong",
+    ])
+  ) {
     return {
       text: t(
-        "อันนี้ Merchie ช่วยไม่ได้นะ การขู่ ประจาน หรือเปิดเผยข้อมูลลูกค้าเสี่ยงโดนฟ้องกลับ ลองให้ Merchie ร่างคำตอบที่สุภาพและรักษาสิทธิของร้านแทนไหม",
-        "I can't help with that. Threatening, shaming or exposing a customer can backfire legally. Want a polite reply that still protects your shop instead?",
+        "อันนี้ Merchie ช่วยไม่ได้นะ การกล่าวหา ขู่ ประจาน หรือเปิดเผยข้อมูลลูกค้า เสี่ยงหมิ่นประมาทและโดนฟ้องกลับ ลองให้ Merchie ร่างคำตอบที่สุภาพและรักษาสิทธิของร้านแทนไหม",
+        "I can't help with that. Accusing, threatening, shaming or exposing a customer risks defamation and can backfire legally. Want a polite reply that still protects your shop instead?",
       ),
       cites: ["defamation", "pdpa"],
       legal: true,

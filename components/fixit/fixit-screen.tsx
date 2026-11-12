@@ -318,7 +318,7 @@ function JobDetail({ job }: { job: Job }) {
   const { t, tr } = useLang();
   const issue = issues.find((i) => i.id === job.issueId)!;
   const { plan, fixesUsed, resolved } = useDemo();
-  // Check-up: fixes come with Care. Care: FIX_LIMIT.plus a month, then Coach (unlimited). Done fixes stay viewable.
+  // Check up: fixes come with Care. Care: FIX_LIMIT.plus a month, then Coach (unlimited). Done fixes stay viewable.
   const done = resolved.includes(job.issueId);
   const careUsedUp = plan === "plus" && fixesUsed >= FIX_LIMIT.plus && !done;
   const need: Exclude<Plan, "free"> = careUsedUp ? "pro" : "plus";

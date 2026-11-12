@@ -4,6 +4,7 @@ Merchie is a prototype for the Chula LegalTech Y8 competition. It gives online s
 
 Full product context: @docs/merchie-brief.md
 Current state of the build (what's done, what's open): @docs/progress.md. **Update it at the end of every session.**
+Technical brief (stack, platform APIs, social listening, AI plan): `docs/technical-overview.md`.
 
 ## What to build (prototype)
 Build the 3 core features only:
@@ -88,9 +89,9 @@ Demo first: everything should support the "skin cream shop on Shopee" demo story
 - **Data:** static mock JSON in the repo, shaped like Shopee Open Platform responses. No login in the demo.
 - **Alerts:** LINE Messaging API, through the LINE OA morning brief and urgent alerts. Only a simulated connect page exists (`components/shop/line-sheet.tsx`); do not call the real LINE API until asked.
 - **Deploy:** Vercel, imported from the GitHub repo `Siwakorn1/Merchie` (auto-deploys on push to `main`). The desktop QR uses the page's own origin. Screenshots for slides live outside the repo in `~/Documents/marchie-screenshots/`.
-- **Plans (4 tiers):** ids `free` / `plus` / `pro` / `business` in code, shown as **Check-up / Care / Coach / Business** via `PLAN_NAME` / `PLAN_SHORT` in `lib/plans.ts`. Never hardcode plan names or limits in copy; use `PLAN_NAME`, `PLATFORM_LIMIT`, `FIX_LIMIT`, `SEAT_LIMIT`, `SHIELD_CASE_PRICE`.
+- **Plans (4 tiers):** ids `free` / `plus` / `pro` / `business` in code, shown as **Check up / Care / Coach / Business** via `PLAN_NAME` / `PLAN_SHORT` in `lib/plans.ts`. Never hardcode plan names or limits in copy; use `PLAN_NAME`, `PLATFORM_LIMIT`, `FIX_LIMIT`, `SEAT_LIMIT`, `SHIELD_CASE_PRICE`.
   - Gate with `useDemo().has(need)`, `ProGate need=…`, or `PlanOffer need=…`. Every "Try" goes through the plan popup (`useTryPlan()` / `usePlanPicker()`); never upgrade directly from a button.
-  - Check-up: health score, 1 platform, says where the problem is, basic checklist, 10 copy checks/month, Shield pay per case.
+  - Check up: health score, 1 platform, says where the problem is, basic checklist, 10 copy checks/month, Shield pay per case.
   - Care: Fix-it 10/month, 3 platforms, customer insight, score analysis, LINE, chat, all looks except Rainbow, 12-month history, unlimited checks, Shield pay per case.
   - Coach: unlimited Fix-it, every platform, Live Coach (live analysis, script check, CF data), Shield included, 3 seats, Crisis, tax, Rainbow look.
   - Business: many shops, unlimited seats, reseller listing checks, monthly report + account manager.

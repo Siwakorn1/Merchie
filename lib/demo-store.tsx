@@ -10,7 +10,7 @@ import type { ShopDoc } from "@/lib/content/documents";
 
 export type LineSettings = { connected: boolean; morning: boolean; urgent: boolean; time: string };
 const LINE_DEFAULT: LineSettings = { connected: false, morning: true, urgent: true, time: "08:00" };
-const PLATFORMS_DEFAULT: PlatformId[] = ["shopee"]; // Check-up connects one platform
+const PLATFORMS_DEFAULT: PlatformId[] = ["shopee"]; // Check up connects one platform
 
 /**
  * Prototype app state. No backend: everything lives in memory and resets on reload,
@@ -36,7 +36,7 @@ type AppState = {
 
   mascotStyle: MascotStyle;
   setMascotStyle: (s: MascotStyle) => void;
-  /** free / plus / pro / business (Check-up / Care / Coach / Business). `has("plus")` = Care or higher */
+  /** free / plus / pro / business (Check up / Care / Coach / Business). `has("plus")` = Care or higher */
   plan: Plan;
   setPlan: (p: Plan) => void;
   has: (need: Plan) => boolean;
@@ -57,7 +57,7 @@ type AppState = {
 
   /** one-tap fixes used this month (Care allows FIX_LIMIT.plus) */
   fixesUsed: number;
-  /** Shield cases paid one by one on Check-up / Care */
+  /** Shield cases paid one by one on Check up / Care */
   shieldCases: string[];
   payShieldCase: (id: string) => void;
 
@@ -84,7 +84,7 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
   const [mascotStyle, setMascotStyle] = useState<MascotStyle>("jelly");
   const [outfit, setOutfit] = useState(true);
   const [plan, setPlanState] = useState<Plan>("free");
-  // switching back down (to Check-up, Care or Coach) always returns Merchie to the Classic look
+  // switching back down (to Check up, Care or Coach) always returns Merchie to the Classic look
   const setPlan = useCallback(
     (next: Plan) => {
       if (PLAN_RANK[next] < PLAN_RANK[plan]) setMascotStyle("jelly");

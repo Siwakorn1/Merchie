@@ -18,7 +18,7 @@ import { l, useLang } from "@/lib/i18n";
 
 /**
  * Shield is open to everyone: the Evidence Vault fills up on every plan. Preparing a case
- * document (appeal or help case) is included on Coach and Business; on Check-up and Care it is
+ * document (appeal or help case) is included on Coach and Business; on Check up and Care it is
  * paid per case. Export is part of the included Shield (Coach and up).
  */
 export function ShieldScreen() {
@@ -235,7 +235,7 @@ function AppealSheet({ open, onOpenChange }: { open: boolean; onOpenChange: (o: 
 }
 
 /**
- * Pay-per-case Shield (Check-up / Care): one case for ~SHIELD_CASE_PRICE, simulated checkout,
+ * Pay-per-case Shield (Check up / Care): one case for ~SHIELD_CASE_PRICE, simulated checkout,
  * or switch to Coach where Shield is included.
  */
 function PayCaseSheet({ request, onClose }: { request: { id: string; then: () => void } | null; onClose: () => void }) {

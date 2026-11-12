@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils";
 type Member = { name: string; role: "owner" | "admin" };
 
 /**
- * Team seats and extra shops. Seats per plan: Check-up 1, Care 1, Coach 3, Business unlimited
+ * Team seats and extra shops. Seats per plan: Check up 1, Care 1, Coach 3, Business unlimited
  * (the owner takes one). More than one shop is Business only. Invites are simulated.
  */
 export function TeamSheet({ open, onOpenChange }: { open: boolean; onOpenChange: (o: boolean) => void }) {

@@ -1,17 +1,20 @@
 # Merchie prototype: current state
 
-Living status doc. **Update this file at the end of every work session**: what changed, what's decided, and what's still open. CLAUDE.md holds the rules; this file holds where things stand.
+Living status doc. **Update this file at the end of every work session**: what changed, what's decided, and what's still open. CLAUDE.md holds the rules; this file holds where things stand. For a self-contained technical brief (stack, APIs, social listening, AI plan) to hand to another engineer or AI, see `docs/technical-overview.md`.
 
 _Last updated: 2026-11-11 (end of session 2)_
 
+## Technical research (2569-11-12)
+- Wrote `docs/technical-overview.md`: current stack and folder map, plan table, what each platform API needs (developer app review + seller OAuth; Shopee has a sandbox; LINE can start now), social listening (Wisesight Zocial Eye covers Pantip; Merchie does own-channel listening in phase 1, partner data in phase 2), and the AI plan (Claude: Opus 5.5 for legal outputs, Sonnet 5.5 or low-effort Opus for chat, Haiku 5.5 for bulk review classification; caching, batch, structured outputs; under ~$2 per Care shop per month).
+
 ## Plans v3: four tiers (owner's table, 2569-11-12)
-- **Check-up (free) / Care (~฿390) / Coach (~฿1,290) / Business (~฿5,000–15,000)**, ids `free` / `plus` / `pro` / `business` in `lib/plans.ts`. Business badge is deep navy (`--plan-biz-*` tokens).
+- **Check up (free) / Care (฿199) / Coach (฿1,199) / Business (฿11,199)** (prices updated from the owner's slide, 2569-11-12), ids `free` / `plus` / `pro` / `business` in `lib/plans.ts`. Business badge is deep navy (`--plan-biz-*` tokens).
 - **Limits** (`PLATFORM_LIMIT`, `FIX_LIMIT`, `SEAT_LIMIT`, `planFor()` picks the cheapest plan above a usage):
   - Platforms 1 / 3 / unlimited / unlimited (Business also many shops).
   - Fix-it one-tap fixes 0 / 10 per month / unlimited / unlimited. Care shows "เหลือ x/10 เดือนนี้"; when used up, a fix opens the Coach offer. Usage = `fixesUsed` (resolved issues) in the demo store.
   - Team seats 1 / 1 / 3 / unlimited (owner counts as one). Extra shops are Business only.
 - **Live Coach** (Coach+): Live analysis, Script check and CF data.
-- **Shield** is open to every plan (the Vault fills on all). Preparing a case document (appeal or help case) is ~฿499 per case on Check-up and Care (simulated checkout, `shieldCases` remembers paid cases), or included on Coach+. Export is Coach+.
+- **Shield** is open to every plan (the Vault fills on all). Preparing a case document (appeal or help case) is ~฿499 per case on Check up and Care (simulated checkout, `shieldCases` remembers paid cases), or included on Coach+. Export is Coach+.
 - **Business demo screens:** Fix-it tool "ตรวจ listing ตัวแทน" (`components/fixit/tools/reseller-tool.tsx`, data `lib/content/business.ts`): resellers' listings scanned for risky claims, safer wording, "ask the reseller to fix it". Shop row "รายงานรายเดือน" (`components/shop/report-sheet.tsx`): month KPIs, highlights, next steps, downloadable report, account manager card (chat / book a call, simulated).
 - Unchanged tiers for everything else: Care keeps LINE, chat, looks, 12-month history, unlimited copy checks; Coach keeps tax, crisis, Rainbow look.
 - Screenshots in `~/Documents/marchie-screenshots/` were taken before v3 (3 tiers); retake the plan/lock set if needed.

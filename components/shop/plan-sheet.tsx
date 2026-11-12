@@ -11,7 +11,7 @@ import { useLang } from "@/lib/i18n";
 import { PLANS, PLAN_NAME, PLAN_RANK, type Plan } from "@/lib/plans";
 import { cn } from "@/lib/utils";
 
-/** Compare Check-up / Care / Coach / Business and switch plans (a trial in the demo). */
+/** Compare Check up / Care / Coach / Business and switch plans (a trial in the demo). */
 const PREV: Record<Plan, Plan> = { free: "free", plus: "free", pro: "plus", business: "pro" };
 
 export function PlanSheet({ open, onOpenChange }: { open: boolean; onOpenChange: (o: boolean) => void }) {
